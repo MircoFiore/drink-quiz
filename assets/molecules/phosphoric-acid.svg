@@ -1,0 +1,16 @@
+<svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:22px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:7px;stroke-linejoin:round;text-anchor:middle;}
+  </style>
+  <path class="bond" d="M110,100 L110,50"/>
+  <path class="bond" d="M114,100 L114,50"/>
+  <text class="atom" x="110" y="42">O</text>
+  <path class="bond" d="M110,100 L60,135"/>
+  <text class="atom" x="48" y="150">OH</text>
+  <path class="bond" d="M110,100 L160,135"/>
+  <text class="atom" x="172" y="150">OH</text>
+  <path class="bond" d="M110,100 L110,155"/>
+  <text class="atom" x="110" y="172">OH</text>
+  <text class="atom" x="110" y="107">P</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:24px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:7px;stroke-linejoin:round;text-anchor:middle;}
+  </style>
+  <path class="bond" d="M40,110 L90,70 L140,110"/>
+  <text class="atom" x="150" y="118">OH</text>
+</svg>

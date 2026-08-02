@@ -1,0 +1,17 @@
+<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:20px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:7px;stroke-linejoin:round;text-anchor:middle;}
+  </style>
+  <!-- anello cicloesanico -->
+  <path class="bond" d="M110,50 L67,75 L67,125 L110,150 L153,125 L153,75 Z"/>
+  <!-- OH sull'anello -->
+  <path class="bond" d="M110,50 L110,20"/>
+  <text class="atom" x="110" y="12">OH</text>
+  <!-- isopropile -->
+  <path class="bond" d="M67,125 L30,140"/>
+  <path class="bond" d="M30,140 L12,120"/>
+  <path class="bond" d="M30,140 L12,160"/>
+  <!-- metile -->
+  <path class="bond" d="M153,125 L188,140"/>
+</svg>

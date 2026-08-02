@@ -1,0 +1,5 @@
+<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+  <style>.b{stroke:#26344C;stroke-width:2.5;stroke-linejoin:round;fill:#C9A94F;}</style>
+  <path class="b" d="M70,15 Q90,15 88,32 Q110,40 105,60 Q100,78 82,80 Q90,95 78,105 Q68,110 62,100 Q75,95 70,84 Q50,80 52,60 Q54,42 70,40 Q60,30 70,15 Z"/>
+  <circle cx="76" cy="30" r="3" fill="#26344C" stroke="none"/>
+</svg>

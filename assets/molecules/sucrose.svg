@@ -1,0 +1,29 @@
+<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:17px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:6px;stroke-linejoin:round;text-anchor:middle;}
+  </style>
+  <!-- anello piranosico (glucosio) -->
+  <path class="bond" d="M55,60 L85,45 L115,60 L115,90 L85,105 L55,90 Z"/>
+  <!-- ponte glicosidico -->
+  <path class="bond" d="M115,60 L150,55 L175,70"/>
+  <text class="atom" x="150" y="45">O</text>
+  <!-- anello furanosico (fruttosio) -->
+  <path class="bond" d="M175,70 L205,55 L232,75 L222,105 L188,102 Z"/>
+  <!-- sostituenti OH glucosio -->
+  <path class="bond" d="M55,60 L28,45"/>
+  <text class="atom" x="20" y="38">OH</text>
+  <path class="bond" d="M55,90 L28,105"/>
+  <text class="atom" x="20" y="115">OH</text>
+  <path class="bond" d="M85,105 L85,135"/>
+  <text class="atom" x="85" y="150">OH</text>
+  <path class="bond" d="M85,45 L85,15"/>
+  <text class="atom" x="85" y="10">CH2OH</text>
+  <!-- sostituenti OH fruttosio -->
+  <path class="bond" d="M205,55 L205,25"/>
+  <text class="atom" x="205" y="18">CH2OH</text>
+  <path class="bond" d="M232,75 L258,65"/>
+  <text class="atom" x="252" y="58">OH</text>
+  <path class="bond" d="M222,105 L232,132"/>
+  <text class="atom" x="236" y="145">OH</text>
+</svg>

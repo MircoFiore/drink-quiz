@@ -1,0 +1,6 @@
+<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+  <style>.b{stroke:#26344C;stroke-width:2.5;stroke-linejoin:round;}</style>
+  <path class="b" d="M20,60 Q45,25 95,35 Q135,42 150,60 Q135,78 95,85 Q45,95 20,60 Z" fill="#4E7EA6"/>
+  <path class="b" d="M150,60 L160,40 L160,80 Z" fill="#3A5F82"/>
+  <circle cx="55" cy="52" r="4" fill="#26344C"/>
+</svg>

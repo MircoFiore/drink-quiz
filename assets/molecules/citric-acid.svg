@@ -1,0 +1,15 @@
+<svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:20px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:7px;stroke-linejoin:round;text-anchor:middle;}
+  </style>
+  <!-- carbonio centrale quaternario -->
+  <path class="bond" d="M110,90 L110,55"/>
+  <path class="bond" d="M110,90 L65,120 L35,155"/>
+  <path class="bond" d="M110,90 L155,120 L185,155"/>
+  <path class="bond" d="M110,90 L110,140"/>
+  <text class="atom" x="110" y="45">OH</text>
+  <text class="atom" x="30" y="172">COOH</text>
+  <text class="atom" x="190" y="172">COOH</text>
+  <text class="atom" x="110" y="158">COOH</text>
+</svg>

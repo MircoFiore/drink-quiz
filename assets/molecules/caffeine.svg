@@ -1,0 +1,26 @@
+<svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:19px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:6px;stroke-linejoin:round;text-anchor:middle;}
+  </style>
+  <!-- anello a 6 (pirimidindione) -->
+  <path class="bond" d="M80,57 L47,76 L47,114 L80,133 L113,114 L113,76 Z"/>
+  <!-- anello a 5 fuso (imidazolo) -->
+  <path class="bond" d="M113,76 L150,70 L170,95 L150,120 L113,114"/>
+  <!-- due carbonili C=O -->
+  <path class="bond" d="M80,57 L80,25"/>
+  <path class="bond" d="M84,57 L84,25"/>
+  <text class="atom" x="80" y="18">O</text>
+  <path class="bond" d="M47,76 L18,60"/>
+  <path class="bond" d="M47,80 L18,64"/>
+  <text class="atom" x="10" y="55">O</text>
+  <!-- etichette azoto -->
+  <text class="atom" x="47" y="70">N</text>
+  <text class="atom" x="47" y="122">N</text>
+  <text class="atom" x="150" y="63">N</text>
+  <text class="atom" x="150" y="128">N</text>
+  <!-- tre metili N-CH3 -->
+  <path class="bond" d="M47,76 L15,90"/>
+  <path class="bond" d="M47,114 L47,150"/>
+  <path class="bond" d="M150,70 L165,40"/>
+</svg>
