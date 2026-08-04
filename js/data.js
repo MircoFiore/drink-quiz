@@ -758,9 +758,13 @@ const GAMES = [
         title: 'Prova di associazione',
         instructions: 'Associa ogni nome scientifico alla sua immagine.',
         pairs: [
-          { name: 'Thunnus (tonno)', image: 'assets/matching-demo/fish-tuna.svg' },
-          { name: 'Amphiprion (pesce pagliaccio)', image: 'assets/matching-demo/fish-clownfish.svg' },
-          { name: 'Hippocampus (cavalluccio marino)', image: 'assets/matching-demo/fish-seahorse.svg' }
+          { name: 'Odontodactylus scyllarus', image: 'assets/matching-demo/Mantis_Shrimp.webp' },
+          { name: 'Carcharodon carcharias', image: 'assets/matching-demo/Grande_squalo_bianco.webp' },
+          { name: 'Paracanthurus hepatus', image: 'assets/matching-demo/Pesce_chirurgo.webp' },
+          { name: 'Melanocetus johnsonii', image: 'assets/matching-demo/melanoceto.webp' },
+          { name: 'Pterois volitans', image: 'assets/matching-demo/red_lione_fish.webp' },
+          { name: 'Macrocheira kaempferi', image: 'assets/matching-demo/Spider_crab.webp' },
+          { name: 'Thunnus albacares', image: 'assets/matching-demo/Tonno_Pinnagialla.webp' }
         ]
       }
       /* Aggiungi qui altri oggetti { type:'matching', ... } per avere più
