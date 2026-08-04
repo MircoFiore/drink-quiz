@@ -256,7 +256,10 @@ function makeMoleculeGuessRound(title, drink) {
 function pickRandomDrinkRounds(count, titlePrefix) {
   const pool = [...DRINKS];
   shuffleArray(pool);
-  return pool.slice(0, count).map((drink, i) =>
+  const selected = pool.slice(0, count)
+    .sort((a, b) => (a.difficulty || 0) - (b.difficulty || 0));   // <-- aggiunta
+
+  return selected.map((drink, i) =>
     makeMoleculeGuessRound(titlePrefix ? `${titlePrefix} ${i + 1}` : `Manche — ${drink.name}`, drink)
   );
 }

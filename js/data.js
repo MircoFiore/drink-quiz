@@ -81,7 +81,7 @@ const MOLECULES = {
     formula: 'C<sub>10</sub>H<sub>20</sub>O',
     name: 'Mentolo',
     color: { hex: '#5FAE8C', label: 'verde menta' },
-    structure: 'assets/molecules/menthol.svg',
+    structure: 'assets/molecules/menthol.png',
     icon: '🌿'
   },
   sucrose: {
@@ -89,7 +89,7 @@ const MOLECULES = {
     formula: 'C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>',
     name: 'Saccarosio',
     color: { hex: '#D2B9A3', label: 'cane sugar' },
-    structure: 'assets/molecules/sucrose.svg',
+    structure: 'assets/molecules/sucrose.webp',
     icon: '🍬'
   },
   nacl: {
@@ -105,7 +105,7 @@ const MOLECULES = {
     formula: 'C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub>',
     name: 'Caffeina',
     color: { hex: '#6B4530', label: 'bruno scuro' },
-    structure: 'assets/molecules/caffeine.svg',
+    structure: 'assets/molecules/caffeine.webp',
     icon: '☕'
   },
   phosphoric_acid: {
@@ -113,7 +113,7 @@ const MOLECULES = {
     formula: 'H<sub>3</sub>PO<sub>4</sub>',
     name: 'Acido fosforico',
     color: { hex: '#C7CED6', label: 'grigio chiaro' },
-    structure: 'assets/molecules/phosphoric-acid.svg',
+    structure: 'assets/molecules/phosphoric-acid.webp',
     icon: '🥤'
   },
   quinine: {
@@ -121,7 +121,7 @@ const MOLECULES = {
     formula: 'C<sub>20</sub>H<sub>24</sub>N<sub>2</sub>O<sub>2</sub>',
     name: 'Chinino',
     color: { hex: '#DCECCB', label: 'verde pallido' },
-    structure: 'assets/molecules/quinine.svg',
+    structure: 'assets/molecules/quinine.webp',
     icon: '🍸'
   },
 
@@ -130,16 +130,34 @@ const MOLECULES = {
     formula: 'C<sub>21</sub>H<sub>22</sub>O<sub>5</sub>',
     name: 'Xantumolo',
     color: { hex: '#B98A2E', label: 'ambra' },
-    structure: 'assets/molecules/xanthohumol.svg',
+    structure: 'assets/molecules/xanthohumol.webp',
     icon: '🍺'
   },
+
+  maltose: {
+    id: 'maltose',
+    formula: 'C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>',
+    name: 'Maltose',
+    color: { hex: '#D8B45A', label: 'giallo malto' },
+    structure: 'assets/molecules/maltose.webp',
+    icon: '🌾'
+  },
+
+  lycopene: {
+      id: 'lycopene',
+      formula: 'C<sub>40</sub>H<sub>56</sub>',
+      name: 'Licopene',
+      color: { hex: '#d1352a', label: 'giallo malto' },
+      structure: 'assets/molecules/lycopene.png',
+      icon: '🍅'
+    },
 
   ovalbumin: {
     id: 'ovalbumin',
     formula: 'Proteina',
     name: 'Ovalbumina',
     color: { hex: '#F3F2ED', label: 'bianco opalescente' },
-    structure: 'assets/molecules/ovalbumin.svg',
+    structure: 'assets/molecules/ovalbumin.jpg',
     icon: '🥚'
   },
 
@@ -148,7 +166,7 @@ const MOLECULES = {
     formula: 'C<sub>14</sub>H<sub>12</sub>O<sub>3</sub>',
     name: 'Resveratrolo',
     color: { hex: '#8B2F4B', label: 'rosso vino' },
-    structure: 'assets/molecules/resveratrol.svg',
+    structure: 'assets/molecules/resveratrol.webp',
     icon: '🍇'
   },
 
@@ -157,7 +175,7 @@ const MOLECULES = {
     formula: 'C<sub>15</sub>H<sub>10</sub>O<sub>7</sub>',
     name: 'Quercetina',
     color: { hex: '#C9A227', label: 'giallo oro' },
-    structure: 'assets/molecules/quercetin.svg',
+    structure: 'assets/molecules/quercetin.webp',
     icon: '🍷'
   },
 
@@ -166,7 +184,7 @@ const MOLECULES = {
     formula: 'C<sub>4</sub>H<sub>6</sub>O<sub>6</sub>',
     name: 'Acido tartarico',
     color: { hex: '#D9B3C4', label: 'rosa tenue' },
-    structure: 'assets/molecules/tartaric_acid.svg',
+    structure: 'assets/molecules/tartaric_acid.webp',
     icon: '🍷'
   },
 
@@ -175,7 +193,7 @@ const MOLECULES = {
     formula: 'C<sub>10</sub>H<sub>20</sub>O<sub>2</sub>',
     name: 'Ottanoato di etile',
     color: { hex: '#F4D35E', label: 'giallo ananas' },
-    structure: 'assets/molecules/ethyl_octanoate.svg',
+    structure: 'assets/molecules/ethyl_octanoate.webp',
     icon: '🍍'
   },
 
@@ -184,7 +202,7 @@ const MOLECULES = {
     formula: 'C<sub>13</sub>H<sub>26</sub>O<sub>2</sub>',
     name: 'Laurato di metile',
     color: { hex: '#F8F3DD', label: 'bianco cocco' },
-    structure: 'assets/molecules/methyl_laurate.svg',
+    structure: 'assets/molecules/methyl_laurate.webp',
     icon: '🥥'
   },
 
@@ -192,8 +210,8 @@ const MOLECULES = {
     id: 'linalool',
     formula: 'C<sub>10</sub>H<sub>18</sub>O',
     name: 'Linalolo',
-    color: { hex: '#A7D8A8', label: 'verde floreale' },
-    structure: 'assets/molecules/linalool.svg',
+    color: { hex: '#e3a9f5', label: 'verde floreale' },
+    structure: 'assets/molecules/linalool.png',
     icon: '🌸'
   },
 
@@ -201,8 +219,8 @@ const MOLECULES = {
     id: 'caryophyllene',
     formula: 'C<sub>15</sub>H<sub>24</sub>',
     name: 'β-Cariofillene',
-    color: { hex: '#8A6A3A', label: 'marrone speziato' },
-    structure: 'assets/molecules/caryophyllene.svg',
+    color: { hex: '#5c5852', label: 'pepper' },
+    structure: 'assets/molecules/caryophyllene.webp',
     icon: '🌿'
   }
 
@@ -689,16 +707,16 @@ const GAMES = [
       title: 'Che drink è?',
       text: 'Ogni manche ti mostra le molecole caratteristiche di un drink: formula chimica e struttura scheletrica. Indovina di che bevanda si tratta! Acqua ed etanolo non contano: sono in ogni drink alcolico.<br><br>Bloccato? Hai 2 aiuti a manche... ma per riceverli devi bere! 🍹'
     },
-    //rounds: pickRandomDrinkRounds(5, 'Campioni')
-    rounds: [
+    rounds: pickRandomDrinkRounds(5, 'Campioni')
+    /*rounds: [
       { type: 'molecule-guess', title: 'Manche 1 — Campioni', drinkId: 'vodka-lemon' },
       { type: 'molecule-guess', title: 'Manche 2 — Campioni', drinkId: 'mojito' },
       { type: 'molecule-guess', title: 'Manche 3 — Campioni', drinkId: 'tequila-sale-limone' },
       { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'cuba-libre' },
-      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'beer' },
-      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'bloody-mary' },
-      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'negroni' }
-    ]
+      { type: 'molecule-guess', title: 'Manche 5 — Campioni', drinkId: 'beer' },
+      { type: 'molecule-guess', title: 'Manche 6 — Campioni', drinkId: 'bloody-mary' },
+      { type: 'molecule-guess', title: 'Manche 7 — Campioni', drinkId: 'negroni' }
+    ]*/
   },
 
   {

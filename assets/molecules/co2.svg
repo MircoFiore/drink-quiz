@@ -1,11 +1,58 @@
-<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
+
   <style>
-    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:26px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:7px;stroke-linejoin:round;text-anchor:middle;}
+    .bond{
+    stroke:#26344C;
+    stroke-width:3.2;
+    stroke-linecap:round;
+    }
+
+    .atom{
+    font-family:Georgia,'Times New Roman',serif;
+    font-weight:700;
+    font-size:28px;
+    fill:#26344C;
+    paint-order:stroke;
+    stroke:#FBF6EA;
+    stroke-width:8px;
+    stroke-linejoin:round;
+    text-anchor:middle;
+    dominant-baseline:middle;
+    }
   </style>
-  <path class="bond" d="M45,88 L172,88"/>
-  <path class="bond" d="M45,104 L172,104"/>
-  <text class="atom" x="35" y="98">O</text>
-  <text class="atom" x="100" y="98">C</text>
-  <text class="atom" x="182" y="98">O</text>
+
+  <!-- doppio legame sinistro -->
+
+  <line class="bond"
+      x1="52" y1="54"
+      x2="88" y2="54"/>
+
+  <line class="bond"
+      x1="52" y1="66"
+      x2="88" y2="66"/>
+
+  <!-- doppio legame destro -->
+
+  <line class="bond"
+      x1="132" y1="54"
+      x2="168" y2="54"/>
+
+  <line class="bond"
+      x1="132" y1="66"
+      x2="168" y2="66"/>
+
+  <!-- atomi -->
+
+  <text class="atom"
+      x="30"
+      y="60">O</text>
+
+  <text class="atom"
+      x="110"
+      y="60">C</text>
+
+  <text class="atom"
+      x="190"
+      y="60">O</text>
+
 </svg>

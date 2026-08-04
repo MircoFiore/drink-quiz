@@ -1,17 +1,62 @@
-<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 -30 200 260" xmlns="http://www.w3.org/2000/svg">
+
   <style>
-    .bond{stroke:#26344C;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-    .atom{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:20px;fill:#26344C;paint-order:stroke;stroke:#FBF6EA;stroke-width:7px;stroke-linejoin:round;text-anchor:middle;}
+    .bond{
+    stroke:#26344C;
+    stroke-width:3;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    }
+
+    .atom{
+    font-family:Georgia,'Times New Roman',serif;
+    font-weight:700;
+    font-size:25px;
+    fill:#26344C;
+    paint-order:stroke;
+    stroke:#FBF6EA;
+    stroke-width:7px;
+    stroke-linejoin:round;
+    text-anchor:middle;
+    }
   </style>
-  <!-- anello cicloesenico -->
-  <path class="bond" d="M100,40 L57,65 L57,115 L100,140 L143,115 L143,65 Z"/>
-  <!-- doppio legame nell'anello -->
-  <path class="bond" d="M105,47 L62,71" />
-  <!-- metile sull'anello -->
-  <path class="bond" d="M100,40 L100,15"/>
-  <!-- gruppo isopropenile -->
-  <path class="bond" d="M100,140 L100,175"/>
-  <path class="bond" d="M100,175 L70,195"/>
-  <path class="bond" d="M104,180 L74,200"/>
-  <path class="bond" d="M100,175 L135,195"/>
+
+  <!-- anello -->
+
+  <path class="bond"
+      d="M100,40 L57,65 L57,115 L100,140 L143,115 L143,65 Z"/>
+
+  <!-- doppio legame -->
+
+  <path class="bond"
+      d="M105,47 L62,71"/>
+
+  <!-- metile -->
+
+  <path class="bond"
+      d="M100,40 L100,15"/>
+
+  <!-- isopropenile -->
+
+  <path class="bond"
+      d="M100,140 L100,175"/>
+
+  <!-- doppio legame corretto -->
+
+  <path class="bond"
+      d="M100,175 L135,195"/>
+
+  <path class="bond"
+      d="M97,179 L132,199"/>
+
+  <!-- metile -->
+
+  <path class="bond"
+      d="M100,175 L70,195"/>
+
+  <text class="atom" x="100" y="20">CH3</text>
+  <text class="atom" x="60" y="221">H3C</text>
+  <text class="atom" x="150" y="222">CH2</text>
+
 </svg>
