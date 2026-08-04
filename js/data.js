@@ -57,7 +57,7 @@ const MOLECULES = {
     formula: 'C<sub>6</sub>H<sub>8</sub>O<sub>7</sub>',
     name: 'Acido citrico',
     color: { hex: '#E8C34A', label: 'giallo dorato' },
-    structure: 'assets/molecules/citric-acid.svg',
+    structure: 'assets/molecules/citric-acid.png',
     icon: '🍋'
   },
   limonene: {
@@ -88,7 +88,7 @@ const MOLECULES = {
     id: 'sucrose',
     formula: 'C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>',
     name: 'Saccarosio',
-    color: { hex: '#F1EADA', label: 'bianco panna' },
+    color: { hex: '#D2B9A3', label: 'cane sugar' },
     structure: 'assets/molecules/sucrose.svg',
     icon: '🍬'
   },
@@ -115,8 +115,98 @@ const MOLECULES = {
     color: { hex: '#C7CED6', label: 'grigio chiaro' },
     structure: 'assets/molecules/phosphoric-acid.svg',
     icon: '🥤'
+  },
+  quinine: {
+    id: 'quinine',
+    formula: 'C<sub>20</sub>H<sub>24</sub>N<sub>2</sub>O<sub>2</sub>',
+    name: 'Chinino',
+    color: { hex: '#DCECCB', label: 'verde pallido' },
+    structure: 'assets/molecules/quinine.svg',
+    icon: '🍸'
+  },
+
+  xanthohumol: {
+    id: 'xanthohumol',
+    formula: 'C<sub>21</sub>H<sub>22</sub>O<sub>5</sub>',
+    name: 'Xantumolo',
+    color: { hex: '#B98A2E', label: 'ambra' },
+    structure: 'assets/molecules/xanthohumol.svg',
+    icon: '🍺'
+  },
+
+  ovalbumin: {
+    id: 'ovalbumin',
+    formula: 'Proteina',
+    name: 'Ovalbumina',
+    color: { hex: '#F3F2ED', label: 'bianco opalescente' },
+    structure: 'assets/molecules/ovalbumin.svg',
+    icon: '🥚'
+  },
+
+  resveratrol: {
+    id: 'resveratrol',
+    formula: 'C<sub>14</sub>H<sub>12</sub>O<sub>3</sub>',
+    name: 'Resveratrolo',
+    color: { hex: '#8B2F4B', label: 'rosso vino' },
+    structure: 'assets/molecules/resveratrol.svg',
+    icon: '🍇'
+  },
+
+  quercetin: {
+    id: 'quercetin',
+    formula: 'C<sub>15</sub>H<sub>10</sub>O<sub>7</sub>',
+    name: 'Quercetina',
+    color: { hex: '#C9A227', label: 'giallo oro' },
+    structure: 'assets/molecules/quercetin.svg',
+    icon: '🍷'
+  },
+
+  tartaric_acid: {
+    id: 'tartaric_acid',
+    formula: 'C<sub>4</sub>H<sub>6</sub>O<sub>6</sub>',
+    name: 'Acido tartarico',
+    color: { hex: '#D9B3C4', label: 'rosa tenue' },
+    structure: 'assets/molecules/tartaric_acid.svg',
+    icon: '🍷'
+  },
+
+  ethyl_octanoate: {
+    id: 'ethyl_octanoate',
+    formula: 'C<sub>10</sub>H<sub>20</sub>O<sub>2</sub>',
+    name: 'Ottanoato di etile',
+    color: { hex: '#F4D35E', label: 'giallo ananas' },
+    structure: 'assets/molecules/ethyl_octanoate.svg',
+    icon: '🍍'
+  },
+
+  methyl_laurate: {
+    id: 'methyl_laurate',
+    formula: 'C<sub>13</sub>H<sub>26</sub>O<sub>2</sub>',
+    name: 'Laurato di metile',
+    color: { hex: '#F8F3DD', label: 'bianco cocco' },
+    structure: 'assets/molecules/methyl_laurate.svg',
+    icon: '🥥'
+  },
+
+  linalool: {
+    id: 'linalool',
+    formula: 'C<sub>10</sub>H<sub>18</sub>O',
+    name: 'Linalolo',
+    color: { hex: '#A7D8A8', label: 'verde floreale' },
+    structure: 'assets/molecules/linalool.svg',
+    icon: '🌸'
+  },
+
+  caryophyllene: {
+    id: 'caryophyllene',
+    formula: 'C<sub>15</sub>H<sub>24</sub>',
+    name: 'β-Cariofillene',
+    color: { hex: '#8A6A3A', label: 'marrone speziato' },
+    structure: 'assets/molecules/caryophyllene.svg',
+    icon: '🌿'
   }
 
+//quinine, xanthohumol, ovalbumin, resveratrol, quercetin, tartaric_acid, ethyl_octanoate, methyl_laurate, linalool, caryophyllene
   /* Aggiungi qui altre molecole seguendo lo stesso schema... */
 };
 
@@ -599,11 +689,15 @@ const GAMES = [
       title: 'Che drink è?',
       text: 'Ogni manche ti mostra le molecole caratteristiche di un drink: formula chimica e struttura scheletrica. Indovina di che bevanda si tratta! Acqua ed etanolo non contano: sono in ogni drink alcolico.<br><br>Bloccato? Hai 2 aiuti a manche... ma per riceverli devi bere! 🍹'
     },
+    //rounds: pickRandomDrinkRounds(5, 'Campioni')
     rounds: [
       { type: 'molecule-guess', title: 'Manche 1 — Campioni', drinkId: 'vodka-lemon' },
       { type: 'molecule-guess', title: 'Manche 2 — Campioni', drinkId: 'mojito' },
       { type: 'molecule-guess', title: 'Manche 3 — Campioni', drinkId: 'tequila-sale-limone' },
-      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'cuba-libre' }
+      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'cuba-libre' },
+      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'beer' },
+      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'bloody-mary' },
+      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'negroni' }
     ]
   },
 

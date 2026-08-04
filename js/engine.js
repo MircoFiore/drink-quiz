@@ -240,3 +240,23 @@ function pickRandomQuestionsFromThemes(themeIds, count, titlePrefix) {
     makeMultipleChoiceRound(titlePrefix ? `${titlePrefix} ${i + 1}` : item.label, item.q)
   );
 }
+
+
+/* Trasforma UN drink in una manche 'molecule-guess' pronta */
+function makeMoleculeGuessRound(title, drink) {
+  return {
+    type: 'molecule-guess',
+    title,
+    drinkId: drink.id
+  };
+}
+
+/* Sceglie "count" drink A CASO da DRINKS (data.js) e li trasforma in
+   manche 'molecule-guess' pronte da mettere nell'array "rounds" di un gioco */
+function pickRandomDrinkRounds(count, titlePrefix) {
+  const pool = [...DRINKS];
+  shuffleArray(pool);
+  return pool.slice(0, count).map((drink, i) =>
+    makeMoleculeGuessRound(titlePrefix ? `${titlePrefix} ${i + 1}` : `Manche — ${drink.name}`, drink)
+  );
+}
