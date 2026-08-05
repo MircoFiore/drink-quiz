@@ -750,9 +750,23 @@ const GAMES = [
     weight: 15,
     intro: {
       title: "Trova l'associazione",
-      text: 'Associa ogni nome alla sua immagine corretta. Puoi sbagliare quante volte vuoi: quello che conta è arrivarci.'
+      text: 'Associa ogni testo alla corrispettiva immagine. Puoi sbagliare quante volte vuoi: l\'importante è bere quando lo fai.'
     },
     rounds: [
+    {
+            type: 'matching',
+            title: 'Prova di associazione',
+            instructions: 'Associa ogni nome scritta alla sua immagine.',
+            pairs: [
+                { name: '12', image: 'assets/matching-demo/12.webp' },
+                { name: '6', image: 'assets/matching-demo/6.png' },
+                { name: '42', image: 'assets/matching-demo/42.png' },
+                { name: '74', image: 'assets/matching-demo/74.webp' },
+                { name: 'Dottore', image: 'assets/matching-demo/dottore.png' },
+                { name: 'Paghi 1?', image: 'assets/matching-demo/paghi.png' },
+                { name: 'Zago', image: 'assets/matching-demo/troll.png' }
+            ]
+          },
       {
         type: 'matching',
         title: 'Prova di associazione',
@@ -766,7 +780,7 @@ const GAMES = [
           { name: 'Macrocheira kaempferi', image: 'assets/matching-demo/Spider_crab.webp' },
           { name: 'Thunnus albacares', image: 'assets/matching-demo/Tonno_Pinnagialla.webp' }
         ]
-      }
+      },
       /* Aggiungi qui altri oggetti { type:'matching', ... } per avere più
          di una prova di associazione in questo stesso gioco. */
     ]

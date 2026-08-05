@@ -273,7 +273,12 @@ function renderMatching(round, stage) {
           ${names.map(n => `<button type="button" class="btn btn-name" data-pair="${n.pairIndex}">${n.text}</button>`).join('')}
         </div>
         <div class="matching-col images-col">
-          ${images.map(im => `<button type="button" class="btn btn-image" data-pair="${im.pairIndex}"><img src="${im.image}" alt=""></button>`).join('')}
+          ${images.map(im => `
+            <div class="btn btn-image" data-pair="${im.pairIndex}" tabindex="0" role="button">
+              <button type="button" class="magnify-btn" data-image="${im.image}" aria-label="Ingrandisci immagine">🔍</button>
+              <img src="${im.image}" alt="">
+            </div>
+          `).join('')}
         </div>
       </div>
       <div id="match-feedback" class="feedback"></div>
@@ -294,6 +299,14 @@ function renderMatching(round, stage) {
     });
   });
 
+  /* Bottone "lente": apre l'immagine ingrandita, senza contare come tentativo */
+  stage.querySelectorAll('.magnify-btn').forEach(mBtn => {
+    mBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openImageLightbox(mBtn.dataset.image);
+    });
+  });
+
   stage.querySelectorAll('.btn-image').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.classList.contains('matched')) return;
@@ -308,7 +321,6 @@ function renderMatching(round, stage) {
         selectedName.classList.remove('selected');
         selectedName.disabled = true;
         btn.classList.add('matched');
-        btn.disabled = true;
         selectedName = null;
         matchedCount++;
         feedback.className = 'feedback correct';
@@ -334,6 +346,37 @@ function renderMatching(round, stage) {
   });
 
   wireNextButton();
+}
+
+/* ---------- lightbox per l'immagine ingrandita (manche "associazione") ---------- */
+
+function openImageLightbox(src) {
+  closeImageLightbox();
+  const overlay = document.createElement('div');
+  overlay.id = 'image-lightbox';
+  overlay.className = 'image-lightbox';
+  overlay.innerHTML = `
+    <div class="image-lightbox-inner">
+      <button class="image-lightbox-close" aria-label="Chiudi">×</button>
+      <img src="${src}" alt="">
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.querySelector('.image-lightbox-close').addEventListener('click', closeImageLightbox);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeImageLightbox();
+  });
+  document.addEventListener('keydown', escCloseLightbox);
+}
+
+function escCloseLightbox(e) {
+  if (e.key === 'Escape') closeImageLightbox();
+}
+
+function closeImageLightbox() {
+  const el = document.getElementById('image-lightbox');
+  if (el) el.remove();
+  document.removeEventListener('keydown', escCloseLightbox);
 }
 
 
