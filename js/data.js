@@ -72,7 +72,7 @@ const MOLECULES = {
     id: 'co2',
     formula: 'CO<sub>2</sub>',
     name: 'Anidride carbonica',
-    color: { hex: '#D8E4EC', label: 'incolore (effervescenza)' },
+    color: { hex: '#8BB8D0', label: 'azzurro effervescenza' },
     structure: 'assets/molecules/co2.svg',
     icon: '💨'
   },
@@ -88,7 +88,7 @@ const MOLECULES = {
     id: 'sucrose',
     formula: 'C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>',
     name: 'Saccarosio',
-    color: { hex: '#D2B9A3', label: 'cane sugar' },
+    color: { hex: '#B8885E', label: 'caramello' },
     structure: 'assets/molecules/sucrose.webp',
     icon: '🍬'
   },
@@ -96,7 +96,7 @@ const MOLECULES = {
     id: 'nacl',
     formula: 'NaCl',
     name: 'Cloruro di sodio',
-    color: { hex: '#EDEDED', label: 'bianco' },
+    color: { hex: '#A0B8C8', label: 'cristallo salino' },
     structure: 'assets/molecules/nacl.svg',
     icon: '🧂'
   },
@@ -112,7 +112,7 @@ const MOLECULES = {
     id: 'phosphoric_acid',
     formula: 'H<sub>3</sub>PO<sub>4</sub>',
     name: 'Acido fosforico',
-    color: { hex: '#C7CED6', label: 'grigio chiaro' },
+    color: { hex: '#7A9BB5', label: 'grigio azzurro' },
     structure: 'assets/molecules/phosphoric-acid.webp',
     icon: '🥤'
   },
@@ -120,7 +120,7 @@ const MOLECULES = {
     id: 'quinine',
     formula: 'C<sub>20</sub>H<sub>24</sub>N<sub>2</sub>O<sub>2</sub>',
     name: 'Chinino',
-    color: { hex: '#DCECCB', label: 'verde pallido' },
+    color: { hex: '#6DBF8B', label: 'verde tonico' },
     structure: 'assets/molecules/quinine.webp',
     icon: '🍸'
   },
@@ -156,7 +156,7 @@ const MOLECULES = {
     id: 'ovalbumin',
     formula: 'Proteina',
     name: 'Ovalbumina',
-    color: { hex: '#F3F2ED', label: 'bianco opalescente' },
+    color: { hex: '#D4B96A', label: 'giallo uovo' },
     structure: 'assets/molecules/ovalbumin.jpg',
     icon: '🥚'
   },
@@ -183,7 +183,7 @@ const MOLECULES = {
     id: 'tartaric_acid',
     formula: 'C<sub>4</sub>H<sub>6</sub>O<sub>6</sub>',
     name: 'Acido tartarico',
-    color: { hex: '#D9B3C4', label: 'rosa tenue' },
+    color: { hex: '#C46B8A', label: 'rosa vino' },
     structure: 'assets/molecules/tartaric_acid.webp',
     icon: '🍷'
   },
@@ -201,7 +201,7 @@ const MOLECULES = {
     id: 'methyl_laurate',
     formula: 'C<sub>13</sub>H<sub>26</sub>O<sub>2</sub>',
     name: 'Laurato di metile',
-    color: { hex: '#F8F3DD', label: 'bianco cocco' },
+    color: { hex: '#8FBFA0', label: 'verde cocco' },
     structure: 'assets/molecules/methyl_laurate.webp',
     icon: '🥥'
   },
@@ -452,7 +452,7 @@ const QUESTION_THEMES = {
       {
         question: 'Come si diluisce correttamente un acido concentrato?',
         options: [
-          "Versando l'acqua nell'acido con la sicurezza di chi non ha mai letto un verbale d'incidente",
+          "Versando l'acqua nell'acido sotto cappa aspirante",
           "Aggiungendo lentamente l'acido all'acqua",
           'Mescolando entrambi contemporaneamente e lasciando decidere alla termodinamica chi torna a casa',
           'Delegando al tirocinante: la selezione naturale ha bisogno di dati'
@@ -462,7 +462,7 @@ const QUESTION_THEMES = {
       {
         question: 'Che cosa contiene una scheda di sicurezza SDS?',
         options: [
-          'I nomi di chi è morto prima che venisse scritta',
+          'Le procedure di smaltimento e i limiti di esposizione giornaliera',
           'Le scuse ufficiali del produttore',
           'Una stima di quanti colleghi fingeranno di averla letta',
           'Informazioni su pericoli, manipolazione, conservazione e primo soccorso'
@@ -472,7 +472,7 @@ const QUESTION_THEMES = {
       {
         question: 'Se il controllo positivo non produce alcun segnale, significa che:',
         options: [
-          'Il campione ha scelto il silenzio stampa',
+          'Il campione analizzato non contiene la sostanza cercata',
           "L'ipotesi è talmente innovativa da non esistere",
           'Il metodo, i reagenti o la procedura potrebbero non aver funzionato',
           'La scienza ti ha ufficialmente diseredato e il laboratorio sta già svuotando il tuo armadietto'
@@ -484,7 +484,7 @@ const QUESTION_THEMES = {
         options: [
           'Aumenta di mille volte',
           'Triplica',
-          'Raddoppia',
+          'Dimezza',
           'Aumenta quanto il desiderio di morte quando il relatore scrive: «Ci sono solo alcune piccole correzioni»'
         ],
         correctIndex: 0
@@ -492,7 +492,7 @@ const QUESTION_THEMES = {
       {
         question: "L'autoclave sterilizza principalmente attraverso:",
         options: [
-          'L\'umiliazione pubblica dei microrganismi',
+          'Radiazioni ultraviolette ad alta intensità',
           'Un colloquio motivazionale ad alta temperatura',
           'La speranza che i batteri si dimettano spontaneamente',
           'Vapore saturo ad alta temperatura e pressione'
@@ -504,7 +504,7 @@ const QUESTION_THEMES = {
         options: [
           'Il dottorando che corre fuori dal laboratorio dopo aver sentito «strano, prima non lo faceva»',
           "Un solido che si forma all'interno di una soluzione",
-          "Ciò che resta della tua autostima dopo aver confuso campione e controllo",
+          "Un gas che si libera durante una reazione esotermica",
           'Un composto che ha deciso di abbandonare la fase liquida prima che lo facessi tu con la carriera accademica'
         ],
         correctIndex: 1
@@ -512,7 +512,7 @@ const QUESTION_THEMES = {
       {
         question: 'Una soluzione tampone serve a:',
         options: [
-          "Assorbire le lacrime senza alterare il volume finale",
+          "Neutralizzare completamente gli acidi e le basi aggiunti",
           'Impedire al tecnico di laboratorio di perdere definitivamente la calma',
           'Limitare le variazioni di pH quando vengono aggiunte piccole quantità di acido o base',
           'Mantenere stabile qualcosa, visto che il ricercatore ormai non lo è più'
@@ -523,7 +523,7 @@ const QUESTION_THEMES = {
         question: 'La centrifuga viene utilizzata per:',
         options: [
           'Separare componenti in base alle loro proprietà, spesso densità e dimensioni',
-          'Verificare quanto velocemente un tappo chiuso male possa trasformarsi in un proiettile',
+          'Omogeneizzare campioni liquidi mediante agitazione rotazionale',
           'Far girare i campioni come il ricercatore gira intorno alla verità nei risultati',
           'Simulare una carriera scientifica: movimento frenetico, rumore assordante e nessun reale avanzamento'
         ],
@@ -532,7 +532,7 @@ const QUESTION_THEMES = {
       {
         question: 'Qual è la funzione principale della cappa chimica?',
         options: [
-          'Conservare gli esperimenti falliti finché il responsabile non va in pensione',
+          'Mantenere una temperatura costante durante le reazioni esotermiche',
           "Ridurre l'esposizione dell'operatore a vapori, gas e aerosol pericolosi",
           'Offrire un luogo ventilato in cui piangere senza appannare gli occhiali',
           'Aspirare lentamente reagenti, speranze e giovani promesse della ricerca'
@@ -543,7 +543,7 @@ const QUESTION_THEMES = {
         question: 'Una soluzione 1 molare contiene:',
         options: [
           'Un grammo di soluto in un litro di solvente',
-          'Una molecola per ogni ricercatore ancora vivo',
+          'Una mole di soluto per chilogrammo di solvente',
           'Una quantità scelta a caso ma scritta con molte cifre decimali',
           'Una mole di soluto per litro di soluzione'
         ],
@@ -558,7 +558,7 @@ const QUESTION_THEMES = {
       {
         question: 'Lo sbiancamento dei coralli è spesso dovuto a:',
         options: [
-          'Una decisione estetica del reef',
+          "Eccesso di radiazione ultravioletta che degrada i pigmenti del corallo",
           "Un tentativo disperato di non essere riconosciuti dall'umanità",
           'Perdita delle alghe simbionti in seguito a stress, soprattutto termico',
           "Il corallo che vede la temperatura dell'oceano e decide di presentarsi già vestito per il proprio funerale"
@@ -569,7 +569,7 @@ const QUESTION_THEMES = {
         question: 'Quanti cuori possiede un polpo?',
         options: [
           'Tre',
-          'Otto, ma tutti impegnati in relazioni tossiche con i tentacoli',
+          'Due, uno per il sangue arterioso e uno per il venoso',
           'Uno, già più del revisore numero 2',
           "Nessuno: dopo aver osservato l'ecosistema universitario ha preferito non svilupparlo"
         ],
@@ -578,7 +578,7 @@ const QUESTION_THEMES = {
       {
         question: 'Le ampolle di Lorenzini degli squali permettono di rilevare:',
         options: [
-          'Il terrore dei bagnanti',
+          'Variazioni di pressione idrostatica a grandi profondità',
           'Le bugie di chi dice «gli squali non attaccano mai» mentre nuota sanguinando',
           'La quantità di dignità rimasta alla preda',
           'Deboli campi elettrici prodotti dagli organismi viventi'
@@ -588,9 +588,9 @@ const QUESTION_THEMES = {
       {
         question: 'Molti ecosistemi delle sorgenti idrotermali profonde si basano sulla:',
         options: [
-          'Fotosintesi eseguita con una lampada da scrivania',
+          'Fotosintesi operata da alghe adattate alle alte temperature',
           'Chemiosintesi',
-          'Energia spirituale di organismi che non vedono il sole da milioni di anni',
+          'Fermentazione anaerobica di materia organica in sedimentazione',
           'Attività di batteri che lavorano al buio, sotto pressione e senza riconoscimento: praticamente assegnisti di ricerca'
         ],
         correctIndex: 1
@@ -598,7 +598,7 @@ const QUESTION_THEMES = {
       {
         question: 'Un organismo sessile è un organismo che:',
         options: [
-          'È depresso ma in grado di nuotare',
+          'Si riproduce esclusivamente per via asessuata',
           "Ha smesso di migrare dopo aver visto il prezzo degli affitti",
           'Vive stabilmente fissato a un substrato',
           'Ha scelto una roccia, vi si è incollato e attende la fine con più serenità di un laureando'
@@ -610,7 +610,7 @@ const QUESTION_THEMES = {
         options: [
           'Sono mammiferi e respirano aria attraverso i polmoni',
           "Devono controllare se l'umanità ha finalmente smesso di gettare plastica",
-          "L'oceano non offre pause caffè",
+          'Necessitano di luce solare per sintetizzare la vitamina D attraverso la pelle',
           "Persino loro, dopo un certo tempo sott'acqua, preferiscono affrontare l'atmosfera piuttosto che restare nell'ambiente di lavoro"
         ],
         correctIndex: 0
@@ -618,7 +618,7 @@ const QUESTION_THEMES = {
       {
         question: 'Le seppie modificano rapidamente il proprio colore grazie soprattutto a:',
         options: [
-          'Vernice biodegradabile',
+          'Pigmenti fluorescenti attivati dalla luce ambientale',
           "Cambiamenti d'umore scientificamente misurabili",
           'Un meccanismo di difesa che consente loro di sparire quando arriva il supervisore',
           'Cromatofori e altre strutture specializzate della pelle'
@@ -628,7 +628,7 @@ const QUESTION_THEMES = {
       {
         question: 'Alcuni cetrioli di mare possono difendersi:',
         options: [
-          'Presentando un reclamo formale al predatore',
+          'Rilasciando una nube di inchiostro tossico come i cefalopodi',
           'Espellendo strutture interne o sostanze appiccicose',
           'Fingendosi morti, strategia già ampiamente adottata durante le riunioni di dipartimento',
           'Liberandosi dei propri organi interni, gesto comunque meno estremo che rispondere alla domanda: «Quando consegni la tesi?»'
@@ -638,7 +638,7 @@ const QUESTION_THEMES = {
       {
         question: 'I cirripedi, come i denti di cane marini, sono:',
         options: [
-          'Molluschi che hanno perso la conchiglia in un incidente amministrativo',
+          'Molluschi bivalvi coloniali',
           "Coralli con una crisi d'identità",
           'Crostacei',
           "Animali che trascorrono l'età adulta cementati a una superficie, immobili e filtrando ciò che passa: il destino finale di molti professori ordinari"
@@ -649,7 +649,7 @@ const QUESTION_THEMES = {
         question: "La zona afotica dell'oceano è:",
         options: [
           'La regione in cui la luce solare è assente o insufficiente per la fotosintesi',
-          'Il punto in cui vengono sepolti i risultati non statisticamente significativi',
+          'La fascia costiera compresa tra alta e bassa marea',
           'La sala riunioni quando il responsabile proietta sessanta diapositive nere con testo grigio',
           'Un luogo oscuro, freddo e sottoposto a pressioni enormi, ma comunque più ospitale del laboratorio il venerdì sera'
         ],
@@ -705,7 +705,7 @@ const GAMES = [
     weight: 30,
     intro: {
       title: 'Che drink è?',
-      text: 'Ogni manche ti mostra le molecole caratteristiche di un drink: formula chimica e struttura scheletrica. Indovina di che bevanda si tratta! Acqua ed etanolo non contano: sono in ogni drink alcolico.<br><br>Bloccato? Hai 2 aiuti a manche... ma per riceverli devi bere! 🍹'
+      text: 'A cosa serve studiare per anni chimica se poi non sai nemmeno riconoscere un drink? Metti caso che poi ti regalo della droga mettendoci dentro qualche pastiglietta, sarebbe scortese non capire di che stupefacente si tratta, o no? Per ora lasciamo da parte le nostre sostanze psicoattive preferite e dedichiamoci all\'alcol in tutte le sue forme e colori.<br><br>In ogni manche ti saranno mostrate delle molecole caratteristiche di un cocktail: formula chimica e struttura scheletrica. Indovina di che bevanda si tratta!<br><br>Ps. Acqua ed etanolo non contano: sono in ogni drink alcolico. <br>Bloccato? Hai 2 aiuti a manche... ma per riceverli devi bere! 🍹'
     },
     rounds: pickRandomDrinkRounds(5, 'Campioni')
     /*rounds: [
@@ -726,7 +726,7 @@ const GAMES = [
     weight: 20,
     intro: {
       title: 'Quante ne sai — Chimica Edition',
-      text: 'Cinque domande a risposta multipla di chimica di laboratorio, pescate a caso dal nostro banco. Attenzione: qualche risposta è scritta apposta per farti sbagliare.'
+      text: 'Passiamo a qualche domanda più specifica, sono certo che per te sarà una passeggiata.<br><br>Troverai una serie di domande, tra le molteplici risposte solo una è esatta. <br>Ma hai un solo tentativo per azzeccare quale.'
     },
     rounds: pickRandomQuestions('chimica_laboratorio', 5, 'Chimica')
   },
@@ -738,7 +738,7 @@ const GAMES = [
     weight: 20,
     intro: {
       title: 'Quante ne sai — Biologia Edition',
-      text: 'Cinque domande a risposta multipla di biologia marina, pescate a caso dal nostro banco.'
+      text: 'Ecco una serie di domande di biologia marina, pescate a caso dal nostro banco. <br>Per ogni domanda hai un solo tentativo.'
     },
     rounds: pickRandomQuestions('biologia_marina', 5, 'Biologia marina')
   },
@@ -750,13 +750,13 @@ const GAMES = [
     weight: 15,
     intro: {
       title: "Trova l'associazione",
-      text: 'Associa ogni testo alla corrispettiva immagine. Puoi sbagliare quante volte vuoi: l\'importante è bere quando lo fai.'
+      text: 'Il cervello umano si è evoluto per milioni di anni in modo da trovare con semplicità associazioni tra concetti basilari. <br>Come "Fuoco" → "Calore", "Gattini" → "Video buffi su internet", "Donna" → "Cucina".<br><br>Ma ora è giusto il momento di dimostrare quanto l\'evoluzione non possa nulla contro la tua ignoranza. O forse ci sorprenderai?<br><br>Associa ogni testo alla corrispettiva immagine, puoi sbagliare quante volte vuoi: <b>l\'importante è bere quando lo fai</b>. <br>Ma occhio, gli errori influiranno il voto finale.'
     },
     rounds: [
     {
             type: 'matching',
             title: 'Prova di associazione',
-            instructions: 'Associa ogni nome scritta alla sua immagine.',
+            instructions: 'Associa ogni scritta alla relativa immagine.',
             pairs: [
                 { name: '12', image: 'assets/matching-demo/12.webp' },
                 { name: '6', image: 'assets/matching-demo/6.png' },
@@ -793,7 +793,7 @@ const GAMES = [
     weight: 15,
     intro: {
       title: 'Splash',
-      text: 'Un\'immagine super zoomata su un dettaglio. Ogni risposta sbagliata allarga un po\' la visuale, finché non la vedi per intero.'
+      text: 'Hai presente LoLdle? Ecco, quello! <br><br>Per chi non fosse un nerd schifoso come il sottoscritto, il giochino consiste nell\'indovinare il soggetto presente in un\'immagine partendo da un piccolo dettaglio.<br><br>Ogni risposta sbagliata allarga un po\' la visuale, finché non sarà visibile per intero. <br>Se sbagli con l\'immagine per intero sei proprio stupido!'
     },
     rounds: [
       {
@@ -815,39 +815,28 @@ const GAMES = [
         aliases: ['cicciogamer89', 'ciccio', 'cicciogamer', 'zago' ],
         zoomFocus: { x: 100, y: 50 },
         startZoom: 5,
-        zoomStep: 1,
+        zoomStep: 1.2,
         minZoom: 1
       },
-      {
-        type: 'image-zoom',
-        title: 'Prova splash',
-        image: 'assets/zoom/duce.jpeg',
-        answer: 'Benito Mussolini',
-        aliases: ['duce', 'dux', 'maiale', 'mussolini', 'benito', 'zago'],
-        zoomFocus: { x: 30, y: 0 },
-        startZoom: 5,
-        zoomStep: 1,
-        minZoom: 1
-      },
-      {
-        type: 'image-zoom',
-        title: 'Prova splash',
-        image: 'assets/zoom/nami.jpeg',
-        answer: 'Nami',
-        aliases: ['nami', 'zago'],
-        zoomFocus: { x: 30, y: 40 },
-        startZoom: 5,
-        zoomStep: 1,
-        minZoom: 1
-      },
+//      {
+//        type: 'image-zoom',
+//        title: 'Prova splash',
+//        image: 'assets/zoom/duce.jpeg',
+//        answer: 'Benito Mussolini',
+//        aliases: ['duce', 'dux', 'maiale', 'mussolini', 'benito', 'zago'],
+//        zoomFocus: { x: 40, y: 0 },
+//        startZoom: 4,
+//        zoomStep: 1,
+//        minZoom: 1
+//      },
       {
         type: 'image-zoom',
         title: 'Prova splash',
         image: 'assets/zoom/fizz.jpeg',
         answer: 'Fizz',
         aliases: ['fizz', 'zago', 'il socio'],
-        zoomFocus: { x: 20, y: 30 },
-        startZoom: 6,
+        zoomFocus: { x: 40, y: 60 },
+        startZoom: 5,
         zoomStep: 1,
         minZoom: 1
       },
@@ -872,18 +861,19 @@ const GAMES = [
         startZoom: 4,
         zoomStep: 1,
         minZoom: 1
-      },
-      {
-        type: 'image-zoom',
-        title: 'Prova splash',
-        image: 'assets/zoom/aang.jpeg',
-        answer: 'Aang',
-        aliases: ['avatar','zago'],
-        zoomFocus: { x: 90, y: 78 },
-        startZoom: 5,
-        zoomStep: 1,
-        minZoom: 1
       }
+//      ,
+//      {
+//        type: 'image-zoom',
+//        title: 'Prova splash',
+//        image: 'assets/zoom/aang.jpeg',
+//        answer: 'Aang',
+//        aliases: ['avatar','zago'],
+//        zoomFocus: { x: 90, y: 78 },
+//        startZoom: 5,
+//        zoomStep: 1,
+//        minZoom: 1
+//      }
 
       /* Aggiungi qui altri oggetti { type:'image-zoom', ... } per avere più
          di una prova "splash" in questo stesso gioco. */

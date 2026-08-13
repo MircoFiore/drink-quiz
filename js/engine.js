@@ -71,17 +71,17 @@ function registerWrongAttempt() {
 
 /* Regola di punteggio:
    - punteggio base 100 per manche completata
-   - ogni tentativo sbagliato costa 15 punti (minimo 40)
+   - ogni tentativo sbagliato costa 25 punti (nessun minimo)
    - gli aiuti NON riducono il punteggio: sono solo scenici (si beve!) */
 function scoreForRound() {
-  const penalty = Game.wrongAttemptsThisRound * 15;
-  return Math.max(100 - penalty, 40);
+  const penalty = Game.wrongAttemptsThisRound * 25;
+  return Math.max(100 - penalty, 0);
 }
 
-function completeRound() {
+function completeRound(customScore) {
   Game.roundLocked = true;
   const round = getCurrentRound();
-  const points = scoreForRound();
+  const points = customScore !== undefined ? customScore : scoreForRound();
 
   Game.score += points;
   Game.stats.push({

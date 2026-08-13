@@ -28,6 +28,52 @@ function tooltipIcon(text) {
   return `<span class="info-icon" tabindex="0" data-tooltip="${text}">i</span>`;
 }
 
+
+
+const WRONG_DRINK_MESSAGES = [
+  'Non è questo il drink, riprova!',
+  'Non ci sei andato nemmeno vicino.',
+  'Ma sei astemio o solo stupido?',
+  'Da sobrio non ce la fai proprio, prova a bere un goccio!',
+  'Noup, vuoi provare a chiedere una mano alla mamma?',
+  'Oggigiorno le lauree le regalano con le patatine.',
+  'Ti serve un ripasso? Prova qui: https://it.wikipedia.org/wiki/Molecola',
+  'Acqua, acqua, fuochino…',
+  'Questa volta hai solo miss-clickato, vero?',
+  '🦕 Ah ah ah! You didn\'t say the magic word! 🦖',
+  'Prova con "latte materno"!',
+  'Sei ancora in tempo per ritirarti',
+  'Se vuoi uscire da questa brutta situazione puoi sempre fingere un malore'
+];
+
+function randomWrongDrinkMessage() {
+  return WRONG_DRINK_MESSAGES[Math.floor(Math.random() * WRONG_DRINK_MESSAGES.length)];
+}
+
+const WRONG_QUIZ_MESSAGES = [
+  'Sbagliato, se lo sapessero i tuoi insegnanti non staremmo festeggiando oggi!',
+  'No! Non capisco se hai bevuto troppo o troppo poco.',
+  'Forse dovresti darti alla Biologia Marina.',
+  'Questa non la sai, ma scommetto che conosci tutti i champion di LOL.',
+  'Forse non hai capito le regole del gioco, devi premere quella esatta!',
+  'Se tu sei quello sveglio della famiglia, ho paura di sapere come sono messi gli altri',
+  'Ti darei 104 motivi per cui hai sbagliato, ma sarà per la prossima volta',
+  'Oltre a essere ignorante sei anche sfortunato, 1/4 non è così difficile da indovinare'
+];
+
+let wrongQuizPool = [];
+
+function randomWrongQuizMessage() {
+  if (wrongQuizPool.length === 0) {
+    wrongQuizPool = [...WRONG_QUIZ_MESSAGES];
+    for (let i = wrongQuizPool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [wrongQuizPool[i], wrongQuizPool[j]] = [wrongQuizPool[j], wrongQuizPool[i]];
+    }
+  }
+  return wrongQuizPool.pop();
+}
+
 function nextButtonHTML() {
   const label = isLastRound() ? 'Vedi risultato prova →' : 'Prossima manche →';
   return `<button id="next-btn" class="btn btn-primary hidden">${label}</button>`;
@@ -53,7 +99,7 @@ function renderMoleculeGuess(round, stage) {
   const molecules = drink.molecules.map(id => MOLECULES[id]);
 
   const moleculeCards = molecules.map((mol, i) => `
-    <div class="mol-card">
+    <div class="mol-card" role="button" tabindex="0" style="--flask-color:${mol.color.hex}" data-structure="${mol.structure}" data-formula="${mol.formula}" data-molname="${mol.name}">
       ${flaskSVG(mol.color.hex)}
       <div class="mol-formula">${mol.formula}</div>
       <img class="mol-structure" src="${mol.structure}" alt="struttura di ${mol.name}">
@@ -63,23 +109,28 @@ function renderMoleculeGuess(round, stage) {
 
   stage.innerHTML = `
     <div class="round-card question-card">
-      <div class="eyebrow">${round.title}</div>
+      <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
       <h2 class="round-heading">Che drink è?
         ${tooltipIcon('Acqua ed etanolo sono presenti in ogni drink alcolico: per questo non vengono mai mostrati tra le molecole indizio.')}
       </h2>
 
-      <div class="hints-row">
-        <button id="hint1-btn" class="btn btn-hint" data-tooltip="Mostra 4 possibili risposte tra cui scegliere">
-          🍹 Aiuto 1 — Mostra 4 opzioni <span class="drink-tag">(bevi!)</span>
-        </button>
-        <button id="hint2-btn" class="btn btn-hint" disabled data-tooltip="Rivela il nome scientifico di ogni molecola indizio. Sblocca prima l'Aiuto 1.">
-          🔒 Aiuto 2 — Rivela i nomi <span class="drink-tag">(bevi!)</span>
-        </button>
+      <div class="guess-row">
+        <div class="hints-col">
+          <div class="hints-row">
+            <button id="hint1-btn" class="btn btn-hint" data-tooltip="Mostra 4 possibili risposte tra cui scegliere">
+              🍹 Aiuto 1 — Mostra 4 opzioni <span class="drink-tag">(bevi!)</span>
+            </button>
+            <button id="hint2-btn" class="btn btn-hint" disabled data-tooltip="Rivela il nome scientifico di ogni molecola indizio. Sblocca prima l'Aiuto 1.">
+              🔒 Aiuto 2 — Rivela i nomi <span class="drink-tag">(bevi!)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="mol-col">
+          <div class="mol-row">${moleculeCards}</div>
+          <div id="mg-options" class="options-row hidden"></div>
+        </div>
       </div>
-
-      <div id="mg-options" class="options-row hidden"></div>
-
-      <div class="mol-row">${moleculeCards}</div>
 
       <form id="mg-form" class="answer-form">
         <input id="mg-input" type="text" placeholder="Scrivi il nome del drink..." autocomplete="off">
@@ -123,18 +174,35 @@ function renderMoleculeGuess(round, stage) {
     document.getElementById('hint2-btn').disabled = true;
   });
 
+  stage.querySelectorAll('.mol-card').forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      const nameEl = card.querySelector('.mol-name');
+      const nameRevealed = nameEl && !nameEl.classList.contains('hidden');
+      openMoleculeLightbox(card.dataset.structure, card.dataset.formula, nameRevealed ? card.dataset.molname : null);
+    });
+  });
+
   const mgInput = document.getElementById('mg-input');
   mgInput.addEventListener('input', clearFeedback);
   mgInput.addEventListener('focus', clearFeedback);
 
+  let lastSubmittedText = null;
+
   document.getElementById('mg-form').addEventListener('submit', (e) => {
     e.preventDefault();
     if (Game.roundLocked) return;
+    const current = mgInput.value.trim();
+    if (!current || current.toLowerCase() === lastSubmittedText) return;
+    lastSubmittedText = current.toLowerCase();
     attemptAnswer(mgInput.value, drink);
   });
 
+  let lastWrongText = null;
+
   function attemptAnswer(text, drink, btnEl) {
     if (Game.roundLocked) return;
+    const normalized = text.trim().toLowerCase();
     if (isCorrectDrinkAnswer(drink, text)) {
       completeRound();
       feedback.className = 'feedback correct';
@@ -144,9 +212,12 @@ function renderMoleculeGuess(round, stage) {
       document.querySelectorAll('.mol-name').forEach(el => el.classList.remove('hidden'));
       showSolutionPopup(drink, molecules);
     } else {
-      registerWrongAttempt();
+      if (normalized !== lastWrongText) {
+        registerWrongAttempt();
+        lastWrongText = normalized;
+      }
       feedback.className = 'feedback wrong';
-      feedback.textContent = 'Non è questo il drink, riprova!';
+      feedback.textContent = randomWrongDrinkMessage();
       if (btnEl) {
         btnEl.classList.add('wrong');
         btnEl.disabled = true;
@@ -189,11 +260,17 @@ function showSolutionPopup(drink, molecules) {
   overlay.innerHTML = `
     <div class="solution-card">
       <div class="solution-ribbon">Soluzione</div>
-      <h2 class="solution-title">${drink.name}</h2>
-      <img class="solution-image" src="${drink.image}" alt="${drink.name}">
-      <div class="solution-molecules">${rows}</div>
-      ${drink.tip ? `<div class="solution-tip">💡 ${drink.tip}</div>` : ''}
-      <div class="solution-difficulty">DIFFICOLTÀ: ${starsHTML(drink.difficulty || 1)}</div>
+      <div class="solution-columns">
+        <div class="solution-header">
+          <h2 class="solution-title">${drink.name}</h2>
+          <img class="solution-image" src="${drink.image}" alt="${drink.name}">
+          <div class="solution-difficulty">DIFFICOLTÀ: ${starsHTML(drink.difficulty || 1)}</div>
+        </div>
+        <div class="solution-body">
+          <div class="solution-molecules">${rows}</div>
+          ${drink.tip ? `<div class="solution-tip">💡 ${drink.tip}</div>` : ''}
+        </div>
+      </div>
       <button id="solution-next-btn" class="btn btn-primary btn-large solution-next">${nextLabel}</button>
     </div>
   `;
@@ -218,7 +295,7 @@ function closeSolutionPopup() {
 function renderMultipleChoice(round, stage) {
   stage.innerHTML = `
     <div class="round-card question-card">
-      <div class="eyebrow">${round.title}</div>
+      <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
       <h2 class="round-heading">${round.question}</h2>
       <div class="options-row mc-options">
         ${round.options.map((opt, i) => `<button type="button" class="btn btn-option" data-index="${i}">${opt}</button>`).join('')}
@@ -233,20 +310,21 @@ function renderMultipleChoice(round, stage) {
       if (Game.roundLocked) return;
       const idx = Number(btn.dataset.index);
       const feedback = document.getElementById('mc-feedback');
+      stage.querySelectorAll('.btn-option').forEach(b => {
+        b.disabled = true;
+        if (Number(b.dataset.index) === round.correctIndex) b.classList.add('correct');
+      });
       if (idx === round.correctIndex) {
-        completeRound();
-        btn.classList.add('correct');
+        completeRound(100);
         feedback.className = 'feedback correct';
         feedback.textContent = 'Esatto! 🎉';
-        stage.querySelectorAll('.btn-option').forEach(b => b.disabled = true);
-        revealNext();
       } else {
-        registerWrongAttempt();
         btn.classList.add('wrong');
-        btn.disabled = true;
+        completeRound(0);
         feedback.className = 'feedback wrong';
-        feedback.textContent = 'Risposta sbagliata, prova con un\'altra opzione.';
+        feedback.textContent = randomWrongQuizMessage();
       }
+      revealNext();
     });
   });
 
@@ -266,7 +344,7 @@ function renderMatching(round, stage) {
 
   stage.innerHTML = `
     <div class="round-card question-card">
-      <div class="eyebrow">${round.title}</div>
+      <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
       <h2 class="round-heading">${round.instructions || 'Associa ogni nome alla sua immagine'}</h2>
       <div class="matching-board">
         <div class="matching-col names-col">
@@ -290,16 +368,68 @@ function renderMatching(round, stage) {
   let matchedCount = 0;
   const total = round.pairs.length;
 
+  const card = stage.querySelector('.round-card');
+  card.addEventListener('click', () => {
+    const fb = document.getElementById('match-feedback');
+    if (fb && fb.textContent) { fb.textContent = ''; fb.className = 'feedback'; }
+  });
+
+  function tryMatch(nameBtn, imageBtn) {
+    const feedback = document.getElementById('match-feedback');
+    if (nameBtn.dataset.pair === imageBtn.dataset.pair) {
+      nameBtn.classList.add('matched');
+      nameBtn.classList.remove('selected');
+      nameBtn.disabled = true;
+      nameBtn.draggable = false;
+      imageBtn.classList.add('matched');
+      selectedName = null;
+      matchedCount++;
+      feedback.className = 'feedback correct';
+      feedback.textContent = 'Coppia corretta!';
+      if (matchedCount === total) {
+        completeRound();
+        feedback.textContent = 'Hai completato tutte le associazioni! 🎉';
+        revealNext();
+      }
+    } else {
+      registerWrongAttempt();
+      imageBtn.classList.add('wrong-flash');
+      nameBtn.classList.add('wrong-flash');
+      feedback.className = 'feedback wrong';
+      feedback.textContent = 'Associazione sbagliata, riprova.';
+      setTimeout(() => {
+        imageBtn.classList.remove('wrong-flash');
+        nameBtn.classList.remove('wrong-flash', 'selected');
+        if (selectedName === nameBtn) selectedName = null;
+      }, 500);
+    }
+  }
+
   stage.querySelectorAll('.btn-name').forEach(btn => {
+    btn.draggable = true;
+
     btn.addEventListener('click', () => {
       if (btn.classList.contains('matched')) return;
       stage.querySelectorAll('.btn-name').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       selectedName = btn;
     });
+
+    btn.addEventListener('dragstart', (e) => {
+      if (btn.classList.contains('matched')) { e.preventDefault(); return; }
+      e.dataTransfer.setData('text/plain', btn.dataset.pair);
+      e.dataTransfer.effectAllowed = 'move';
+      btn.classList.add('dragging');
+      stage.querySelectorAll('.btn-name').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedName = btn;
+    });
+
+    btn.addEventListener('dragend', () => {
+      btn.classList.remove('dragging');
+    });
   });
 
-  /* Bottone "lente": apre l'immagine ingrandita, senza contare come tentativo */
   stage.querySelectorAll('.magnify-btn').forEach(mBtn => {
     mBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -316,32 +446,25 @@ function renderMatching(round, stage) {
         feedback.textContent = 'Seleziona prima un nome a sinistra.';
         return;
       }
-      if (selectedName.dataset.pair === btn.dataset.pair) {
-        selectedName.classList.add('matched');
-        selectedName.classList.remove('selected');
-        selectedName.disabled = true;
-        btn.classList.add('matched');
-        selectedName = null;
-        matchedCount++;
-        feedback.className = 'feedback correct';
-        feedback.textContent = 'Coppia corretta!';
-        if (matchedCount === total) {
-          completeRound();
-          feedback.textContent = 'Hai completato tutte le associazioni! 🎉';
-          revealNext();
-        }
-      } else {
-        registerWrongAttempt();
-        btn.classList.add('wrong-flash');
-        selectedName.classList.add('wrong-flash');
-        feedback.className = 'feedback wrong';
-        feedback.textContent = 'Associazione sbagliata, riprova.';
-        setTimeout(() => {
-          btn.classList.remove('wrong-flash');
-          if (selectedName) selectedName.classList.remove('wrong-flash', 'selected');
-          selectedName = null;
-        }, 500);
-      }
+      tryMatch(selectedName, btn);
+    });
+
+    btn.addEventListener('dragover', (e) => {
+      if (btn.classList.contains('matched')) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      btn.classList.add('drag-over');
+    });
+
+    btn.addEventListener('dragleave', () => {
+      btn.classList.remove('drag-over');
+    });
+
+    btn.addEventListener('drop', (e) => {
+      e.preventDefault();
+      btn.classList.remove('drag-over');
+      if (btn.classList.contains('matched') || !selectedName) return;
+      tryMatch(selectedName, btn);
     });
   });
 
@@ -379,6 +502,27 @@ function closeImageLightbox() {
   document.removeEventListener('keydown', escCloseLightbox);
 }
 
+function openMoleculeLightbox(src, formula, name) {
+  closeImageLightbox();
+  const overlay = document.createElement('div');
+  overlay.id = 'image-lightbox';
+  overlay.className = 'image-lightbox';
+  overlay.innerHTML = `
+    <div class="image-lightbox-inner mol-lightbox-inner">
+      <button class="image-lightbox-close" aria-label="Chiudi">&times;</button>
+      <h3 class="mol-lightbox-title">${formula}</h3>
+      <img src="${src}" alt="${name}">
+      ${name ? `<p class="mol-lightbox-name">${name}</p>` : ''}
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.querySelector('.image-lightbox-close').addEventListener('click', closeImageLightbox);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeImageLightbox();
+  });
+  document.addEventListener('keydown', escCloseLightbox);
+}
+
 
 /* =========================================================================
    TIPO 4 — IMAGE ZOOM (indovina dall'immagine super-zoomata, stile "splash")
@@ -393,7 +537,7 @@ function renderImageZoom(round, stage) {
 
   stage.innerHTML = `
     <div class="round-card question-card">
-      <div class="eyebrow">${round.title}</div>
+      <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
       <h2 class="round-heading">Indovina dall'immagine
         ${tooltipIcon('Ogni risposta sbagliata allontana un po\' lo zoom, fino a mostrare l\'immagine intera.')}
       </h2>
@@ -420,9 +564,14 @@ function renderImageZoom(round, stage) {
   input.addEventListener('input', clearFeedback);
   input.addEventListener('focus', clearFeedback);
 
+  let lastSubmittedZoom = null;
+
   document.getElementById('zoom-form').addEventListener('submit', (e) => {
     e.preventDefault();
     if (Game.roundLocked) return;
+    const current = input.value.trim();
+    if (!current || current.toLowerCase() === lastSubmittedZoom) return;
+    lastSubmittedZoom = current.toLowerCase();
 
     if (isCorrectSimpleAnswer(round, input.value)) {
       completeRound();
