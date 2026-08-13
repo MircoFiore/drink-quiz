@@ -806,7 +806,85 @@ const GAMES = [
         startZoom: 5,
         zoomStep: 1,
         minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/ciccio.jpeg',
+        answer: 'CiccioGamer89',
+        aliases: ['cicciogamer89', 'ciccio', 'cicciogamer', 'zago' ],
+        zoomFocus: { x: 100, y: 50 },
+        startZoom: 5,
+        zoomStep: 1,
+        minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/duce.jpeg',
+        answer: 'Benito Mussolini',
+        aliases: ['duce', 'dux', 'maiale', 'mussolini', 'benito', 'zago'],
+        zoomFocus: { x: 30, y: 0 },
+        startZoom: 5,
+        zoomStep: 1,
+        minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/nami.jpeg',
+        answer: 'Nami',
+        aliases: ['nami', 'zago'],
+        zoomFocus: { x: 30, y: 40 },
+        startZoom: 5,
+        zoomStep: 1,
+        minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/fizz.jpeg',
+        answer: 'Fizz',
+        aliases: ['fizz', 'zago', 'il socio'],
+        zoomFocus: { x: 20, y: 30 },
+        startZoom: 6,
+        zoomStep: 1,
+        minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/the_rock.jpeg',
+        answer: 'Dwayne Johnson',
+        aliases: ['Dwayne Johnson', 'the rock', 'Dwayne Douglas Johnson', 'zago'],
+        zoomFocus: { x: 52, y: 10 },
+        startZoom: 5,
+        zoomStep: 1,
+        minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/pelato.jpeg',
+        answer: 'Johnny Sins',
+        aliases: ['Sins', 'pelato', 'il pelato', 'il pelato di brazzers','zago'],
+        zoomFocus: { x: 50, y: 80 },
+        startZoom: 4,
+        zoomStep: 1,
+        minZoom: 1
+      },
+      {
+        type: 'image-zoom',
+        title: 'Prova splash',
+        image: 'assets/zoom/aang.jpeg',
+        answer: 'Aang',
+        aliases: ['avatar','zago'],
+        zoomFocus: { x: 90, y: 78 },
+        startZoom: 5,
+        zoomStep: 1,
+        minZoom: 1
       }
+
       /* Aggiungi qui altri oggetti { type:'image-zoom', ... } per avere più
          di una prova "splash" in questo stesso gioco. */
     ]
