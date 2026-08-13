@@ -934,6 +934,13 @@ body {
   .zoom-frame { max-width: 580px; margin-left: auto; margin-right: auto; }
 }
 
+@media (min-width: 900px) and (max-width: 1199px) {
+
+    .game-btn{
+      aspect-ratio: auto;
+    }
+}
+
 /* ---------- vertical centering on spacious landscape screens ---------- */
 
 @media (min-height: 700px) and (min-width: 900px) {
