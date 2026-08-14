@@ -100,19 +100,24 @@ function renderMoleculeGuess(round, stage) {
 
   const moleculeCards = molecules.map((mol, i) => `
     <div class="mol-card" role="button" tabindex="0" style="--flask-color:${mol.color.hex}" data-structure="${mol.structure}" data-formula="${mol.formula}" data-molname="${mol.name}">
-      ${flaskSVG(mol.color.hex)}
-      <div class="mol-formula">${mol.formula}</div>
-      <img class="mol-structure" src="${mol.structure}" alt="struttura di ${mol.name}">
-      <div class="mol-name hidden" data-mol="${i}">${mol.name}</div>
+      <div class="mol-left">
+        ${flaskSVG(mol.color.hex)}
+        <div class="mol-name hidden" data-mol="${i}">${mol.name}</div>
+      </div>
+      <div class="mol-right">
+        <div class="mol-formula">${mol.formula}</div>
+        <img class="mol-structure" src="${mol.structure}" alt="struttura di ${mol.name}">
+      </div>
     </div>
   `).join('');
 
   stage.innerHTML = `
     <div class="round-card question-card">
       <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
-      <h2 class="round-heading">Che drink è?
+      <div class="heading-row">
+        <h2 class="round-heading">Che drink è?</h2>
         ${tooltipIcon('Acqua ed etanolo sono presenti in ogni drink alcolico: per questo non vengono mai mostrati tra le molecole indizio.')}
-      </h2>
+      </div>
 
       <div class="guess-row">
         <div class="hints-col">
@@ -405,6 +410,9 @@ function renderMatching(round, stage) {
     }
   }
 
+  let touchDragging = null;
+  let touchMoved = false;
+
   stage.querySelectorAll('.btn-name').forEach(btn => {
     btn.draggable = true;
 
@@ -427,6 +435,42 @@ function renderMatching(round, stage) {
 
     btn.addEventListener('dragend', () => {
       btn.classList.remove('dragging');
+    });
+
+    btn.addEventListener('touchstart', (e) => {
+      if (btn.classList.contains('matched')) return;
+      touchDragging = btn;
+      touchMoved = false;
+      stage.querySelectorAll('.btn-name').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected', 'dragging');
+      selectedName = btn;
+    }, { passive: true });
+
+    btn.addEventListener('touchmove', (e) => {
+      if (!touchDragging || touchDragging !== btn) return;
+      touchMoved = true;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      stage.querySelectorAll('.btn-image').forEach(b => b.classList.remove('drag-over'));
+      if (target) {
+        const imageBtn = target.closest('.btn-image');
+        if (imageBtn && !imageBtn.classList.contains('matched')) {
+          imageBtn.classList.add('drag-over');
+        }
+      }
+    }, { passive: false });
+
+    btn.addEventListener('touchend', (e) => {
+      if (!touchDragging || touchDragging !== btn) return;
+      btn.classList.remove('dragging');
+      const overBtn = stage.querySelector('.btn-image.drag-over');
+      stage.querySelectorAll('.btn-image').forEach(b => b.classList.remove('drag-over'));
+      if (touchMoved && overBtn) {
+        tryMatch(btn, overBtn);
+      }
+      touchDragging = null;
+      touchMoved = false;
     });
   });
 
@@ -538,9 +582,10 @@ function renderImageZoom(round, stage) {
   stage.innerHTML = `
     <div class="round-card question-card">
       <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
-      <h2 class="round-heading">Indovina dall'immagine
+      <div class="heading-row">
+        <h2 class="round-heading">Indovina dall'immagine</h2>
         ${tooltipIcon('Ogni risposta sbagliata allontana un po\' lo zoom, fino a mostrare l\'immagine intera.')}
-      </h2>
+      </div>
 
       <div class="zoom-frame">
         <img id="zoom-image" class="zoom-image" src="${round.image}" alt="immagine da indovinare"

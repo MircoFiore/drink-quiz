@@ -750,7 +750,7 @@ const GAMES = [
     weight: 15,
     intro: {
       title: "Trova l'associazione",
-      text: 'Il cervello umano si è evoluto per milioni di anni in modo da trovare con semplicità associazioni tra concetti basilari. <br>Come "Fuoco" → "Calore", "Gattini" → "Video buffi su internet", "Donna" → "Cucina".<br><br>Ma ora è giusto il momento di dimostrare quanto l\'evoluzione non possa nulla contro la tua ignoranza. O forse ci sorprenderai?<br><br>Associa ogni testo alla corrispettiva immagine, puoi sbagliare quante volte vuoi: <b>l\'importante è bere quando lo fai</b>. <br>Ma occhio, gli errori influiranno il voto finale.'
+      text: 'Il cervello umano si è evoluto per milioni di anni in modo da trovare con semplicità associazioni tra concetti basilari. <br>Come "Fuoco" → "Calore", "Gattini" → "Video buffi su internet", "Donna" → "Cucina".<br><br>Ma ora è giunto il momento di dimostrare quanto l\'evoluzione non possa nulla contro la tua ignoranza. O forse ci sorprenderai?<br><br>Associa ogni testo alla corrispettiva immagine, puoi sbagliare quante volte vuoi: <b>l\'importante è bere quando lo fai</b>. <br>Ma occhio, gli errori influiranno il voto finale.'
     },
     rounds: [
     {
@@ -758,7 +758,7 @@ const GAMES = [
             title: 'Prova di associazione',
             instructions: 'Associa ogni scritta alla relativa immagine.',
             pairs: [
-                { name: '12', image: 'assets/matching-demo/12.webp' },
+                { name: '12', image: 'assets/matching-demo/12.png' },
                 { name: '6', image: 'assets/matching-demo/6.png' },
                 { name: '42', image: 'assets/matching-demo/42.png' },
                 { name: '74', image: 'assets/matching-demo/74.webp' },

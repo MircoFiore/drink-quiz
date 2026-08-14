@@ -17,6 +17,64 @@
 document.addEventListener('DOMContentLoaded', () => {
   resetSession();
   showHubScreen();
+
+  document.addEventListener('focusin', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 350);
+    }
+  });
+
+  let activeBubble = null;
+
+  function showTooltip(el) {
+    hideTooltip();
+    const text = el.getAttribute('data-tooltip');
+    if (!text) return;
+    const bubble = document.createElement('div');
+    bubble.className = 'tooltip-bubble';
+    bubble.textContent = text;
+    document.body.appendChild(bubble);
+    activeBubble = bubble;
+
+    const rect = el.getBoundingClientRect();
+    const bw = bubble.offsetWidth;
+    const bh = bubble.offsetHeight;
+    const gap = 10;
+
+    let top = rect.bottom + gap;
+    let left = rect.left + rect.width / 2 - bw / 2;
+
+    if (top + bh > window.innerHeight) {
+      top = rect.top - bh - gap;
+    }
+
+    if (left < 8) left = 8;
+    if (left + bw > window.innerWidth - 8) left = window.innerWidth - 8 - bw;
+
+    bubble.style.top = top + 'px';
+    bubble.style.left = left + 'px';
+  }
+
+  function hideTooltip() {
+    if (activeBubble) { activeBubble.remove(); activeBubble = null; }
+  }
+
+  document.addEventListener('pointerover', (e) => {
+    const el = e.target.closest('[data-tooltip]');
+    if (el) showTooltip(el);
+  });
+  document.addEventListener('pointerout', (e) => {
+    const el = e.target.closest('[data-tooltip]');
+    if (el) hideTooltip();
+  });
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-tooltip]');
+    if (el) { showTooltip(el); e.preventDefault(); }
+    else hideTooltip();
+  });
+  document.addEventListener('scroll', hideTooltip, true);
 });
 
 
