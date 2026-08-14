@@ -29,28 +29,6 @@ body {
   padding: 24px 16px 60px;
 }
 
-/* ---------- header ---------- */
-
-.app-header {
-  width: 100%;
-  max-width: var(--content-width);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--cream-light);
-  margin-bottom: 18px;
-  font-family: 'Space Mono', monospace;
-  letter-spacing: 0.04em;
-  font-size: 0.85rem;
-}
-
-.app-header .brand {
-  font-family: 'Alfa Slab One', serif;
-  font-size: 1.1rem;
-  color: var(--gold);
-  letter-spacing: 0.02em;
-}
-
 /* ---------- stage ---------- */
 
 #stage {
@@ -1018,10 +996,7 @@ body {
   body { padding: 32px 24px 60px; }
   .round-card { padding: 40px 38px; }
 
-  .app-header { font-size: 0.92rem; }
-  .app-header .brand { font-size: 1.2rem; }
-
-  .eyebrow { font-size: 0.85rem; top: 18px; right: 22px; }
+  .eyebrow { font-size: 0.85rem; }
   .round-heading { font-size: 2.1rem; }
   .round-heading.big { font-size: 2.6rem; }
   .intro-text { font-size: 1.12rem; }
@@ -1052,13 +1027,10 @@ body {
 
   body { padding: 48px 40px 80px; font-size: 1.08rem; }
 
-  .app-header { font-size: 0.98rem; margin-bottom: 26px; }
-  .app-header .brand { font-size: 1.35rem; }
-
   .round-card { padding: 50px 48px; border-radius: 22px; border-width: 4px; }
   .round-card::before { inset: 10px; border-radius: 16px; }
 
-  .eyebrow { font-size: 0.92rem; letter-spacing: 0.14em; top: 22px; right: 28px; }
+  .eyebrow { font-size: 0.92rem; letter-spacing: 0.14em; }
   .round-heading { font-size: 2.5rem; margin-top: 18px; margin-bottom: 44px; }
   .start-card #game-start-btn { margin-top: 28px; }
   .round-heading.big { font-size: 3rem; }
@@ -1169,13 +1141,10 @@ body {
 @media (orientation: landscape) and (max-height: 500px) {
   body { padding: 8px 16px 16px; }
 
-  .app-header { margin-bottom: 6px; font-size: 0.75rem; }
-  .app-header .brand { font-size: 0.9rem; }
-
   .round-card { padding: 16px 18px; border-radius: 12px; }
   .round-card::before { inset: 4px; border-radius: 9px; }
 
-  .eyebrow { font-size: 0.7rem; top: 8px; right: 10px; }
+  .eyebrow { font-size: 0.7rem; }
 
   .round-heading { font-size: 1.3rem; margin-bottom: 10px; gap: 6px; }
   .round-heading.big { font-size: 1.5rem; }

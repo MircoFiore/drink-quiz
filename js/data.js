@@ -1,41 +1,18 @@
 /* =========================================================================
    DATI DEL GIOCO — "Test di Laurea, il quiz"
    =========================================================================
-   Questo è l'UNICO file che devi modificare per aggiungere o cambiare
-   contenuti (molecole, drink, domande, e i GIOCHI stessi con le loro
-   manche). Non serve toccare il resto del codice.
-
-   Il sito è organizzato in GIOCHI (sezione 4, GAMES): l'utente li sceglie
-   dalla schermata principale nell'ordine che preferisce. Ogni gioco è
-   composto da una o più manche (stessi 4 tipi di sempre: molecule-guess,
-   multiple-choice, matching, image-zoom).
-
-   Guarda il file README.md per la guida passo-passo.
+   Contiene SOLO dati: molecole, drink, domande e definizioni dei giochi.
+   Nessuna logica qui — la costruzione dei round avviene in round-builders.js
+   e viene invocata all'avvio di ogni gioco da engine.js (initGame).
    ========================================================================= */
 
 
 /* -------------------------------------------------------------------------
    1) MOLECOLE
-   -------------------------------------------------------------------------
-   Ogni molecola ha:
-     id        -> identificativo unico (usato per collegarla ai drink)
-     formula   -> formula chimica, puoi usare <sub> per i pedici
-     name      -> nome comune/scientifico, mostrato solo dopo l'Aiuto 1
-     color     -> colore associato (usato per colorare il liquido nella
-                  boccetta): { hex: '#RRGGBB', label: 'nome del colore' }
-     structure -> percorso del file SVG con la struttura scheletrica
-     common    -> true SOLO per acqua ed etanolo: sono presenti in ogni
-                  drink alcolico e quindi vengono sempre nascoste, con un
-                  tooltip esplicativo (vedi motore di gioco)
-
-   Per aggiungere una nuova molecola: copia un blocco, cambia id/valori,
-   e disegna/aggiungi il suo file SVG in assets/molecules/.
    ------------------------------------------------------------------------- */
 
 const MOLECULES = {
-
   water: {
-    id: 'water',
     formula: 'H<sub>2</sub>O',
     name: 'Acqua',
     color: { hex: '#8FC1E3', label: 'azzurro trasparente' },
@@ -44,7 +21,6 @@ const MOLECULES = {
     common: true
   },
   ethanol: {
-    id: 'ethanol',
     formula: 'C<sub>2</sub>H<sub>6</sub>O',
     name: 'Etanolo',
     color: { hex: '#9FCB7F', label: 'verde chiaro' },
@@ -53,7 +29,6 @@ const MOLECULES = {
     common: true
   },
   citric_acid: {
-    id: 'citric_acid',
     formula: 'C<sub>6</sub>H<sub>8</sub>O<sub>7</sub>',
     name: 'Acido citrico',
     color: { hex: '#E8C34A', label: 'giallo dorato' },
@@ -61,7 +36,6 @@ const MOLECULES = {
     icon: '🍋'
   },
   limonene: {
-    id: 'limonene',
     formula: 'C<sub>10</sub>H<sub>16</sub>',
     name: 'Limonene',
     color: { hex: '#EFA23B', label: 'arancione' },
@@ -69,7 +43,6 @@ const MOLECULES = {
     icon: '🍊'
   },
   co2: {
-    id: 'co2',
     formula: 'CO<sub>2</sub>',
     name: 'Anidride carbonica',
     color: { hex: '#8BB8D0', label: 'azzurro effervescenza' },
@@ -77,7 +50,6 @@ const MOLECULES = {
     icon: '💨'
   },
   menthol: {
-    id: 'menthol',
     formula: 'C<sub>10</sub>H<sub>20</sub>O',
     name: 'Mentolo',
     color: { hex: '#5FAE8C', label: 'verde menta' },
@@ -85,7 +57,6 @@ const MOLECULES = {
     icon: '🌿'
   },
   sucrose: {
-    id: 'sucrose',
     formula: 'C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>',
     name: 'Saccarosio',
     color: { hex: '#B8885E', label: 'caramello' },
@@ -93,7 +64,6 @@ const MOLECULES = {
     icon: '🍬'
   },
   nacl: {
-    id: 'nacl',
     formula: 'NaCl',
     name: 'Cloruro di sodio',
     color: { hex: '#A0B8C8', label: 'cristallo salino' },
@@ -101,7 +71,6 @@ const MOLECULES = {
     icon: '🧂'
   },
   caffeine: {
-    id: 'caffeine',
     formula: 'C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub>',
     name: 'Caffeina',
     color: { hex: '#6B4530', label: 'bruno scuro' },
@@ -109,7 +78,6 @@ const MOLECULES = {
     icon: '☕'
   },
   phosphoric_acid: {
-    id: 'phosphoric_acid',
     formula: 'H<sub>3</sub>PO<sub>4</sub>',
     name: 'Acido fosforico',
     color: { hex: '#7A9BB5', label: 'grigio azzurro' },
@@ -117,140 +85,94 @@ const MOLECULES = {
     icon: '🥤'
   },
   quinine: {
-    id: 'quinine',
     formula: 'C<sub>20</sub>H<sub>24</sub>N<sub>2</sub>O<sub>2</sub>',
     name: 'Chinino',
     color: { hex: '#6DBF8B', label: 'verde tonico' },
     structure: 'assets/molecules/quinine.webp',
     icon: '🍸'
   },
-
   xanthohumol: {
-    id: 'xanthohumol',
     formula: 'C<sub>21</sub>H<sub>22</sub>O<sub>5</sub>',
     name: 'Xantumolo',
     color: { hex: '#B98A2E', label: 'ambra' },
     structure: 'assets/molecules/xanthohumol.webp',
     icon: '🍺'
   },
-
   maltose: {
-    id: 'maltose',
     formula: 'C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>',
     name: 'Maltose',
     color: { hex: '#D8B45A', label: 'giallo malto' },
     structure: 'assets/molecules/maltose.webp',
     icon: '🌾'
   },
-
   lycopene: {
-      id: 'lycopene',
-      formula: 'C<sub>40</sub>H<sub>56</sub>',
-      name: 'Licopene',
-      color: { hex: '#d1352a', label: 'giallo malto' },
-      structure: 'assets/molecules/lycopene.png',
-      icon: '🍅'
-    },
-
+    formula: 'C<sub>40</sub>H<sub>56</sub>',
+    name: 'Licopene',
+    color: { hex: '#d1352a', label: 'rosso licopene' },
+    structure: 'assets/molecules/lycopene.png',
+    icon: '🍅'
+  },
   ovalbumin: {
-    id: 'ovalbumin',
     formula: 'Proteina',
     name: 'Ovalbumina',
     color: { hex: '#D4B96A', label: 'giallo uovo' },
     structure: 'assets/molecules/ovalbumin.jpg',
     icon: '🥚'
   },
-
   resveratrol: {
-    id: 'resveratrol',
     formula: 'C<sub>14</sub>H<sub>12</sub>O<sub>3</sub>',
     name: 'Resveratrolo',
     color: { hex: '#8B2F4B', label: 'rosso vino' },
     structure: 'assets/molecules/resveratrol.webp',
     icon: '🍇'
   },
-
   quercetin: {
-    id: 'quercetin',
     formula: 'C<sub>15</sub>H<sub>10</sub>O<sub>7</sub>',
     name: 'Quercetina',
     color: { hex: '#C9A227', label: 'giallo oro' },
     structure: 'assets/molecules/quercetin.webp',
     icon: '🍷'
   },
-
   tartaric_acid: {
-    id: 'tartaric_acid',
     formula: 'C<sub>4</sub>H<sub>6</sub>O<sub>6</sub>',
     name: 'Acido tartarico',
     color: { hex: '#C46B8A', label: 'rosa vino' },
     structure: 'assets/molecules/tartaric_acid.webp',
     icon: '🍷'
   },
-
   ethyl_octanoate: {
-    id: 'ethyl_octanoate',
     formula: 'C<sub>10</sub>H<sub>20</sub>O<sub>2</sub>',
     name: 'Ottanoato di etile',
     color: { hex: '#F4D35E', label: 'giallo ananas' },
     structure: 'assets/molecules/ethyl_octanoate.webp',
     icon: '🍍'
   },
-
   methyl_laurate: {
-    id: 'methyl_laurate',
     formula: 'C<sub>13</sub>H<sub>26</sub>O<sub>2</sub>',
     name: 'Laurato di metile',
     color: { hex: '#8FBFA0', label: 'verde cocco' },
     structure: 'assets/molecules/methyl_laurate.webp',
     icon: '🥥'
   },
-
   linalool: {
-    id: 'linalool',
     formula: 'C<sub>10</sub>H<sub>18</sub>O',
     name: 'Linalolo',
     color: { hex: '#e3a9f5', label: 'verde floreale' },
     structure: 'assets/molecules/linalool.png',
     icon: '🌸'
   },
-
   caryophyllene: {
-    id: 'caryophyllene',
     formula: 'C<sub>15</sub>H<sub>24</sub>',
     name: 'β-Cariofillene',
     color: { hex: '#5c5852', label: 'pepper' },
     structure: 'assets/molecules/caryophyllene.webp',
     icon: '🌿'
   }
-
-//quinine, xanthohumol, ovalbumin, resveratrol, quercetin, tartaric_acid, ethyl_octanoate, methyl_laurate, linalool, caryophyllene
-  /* Aggiungi qui altre molecole seguendo lo stesso schema... */
 };
 
 
 /* -------------------------------------------------------------------------
    2) DRINK
-   -------------------------------------------------------------------------
-   Ogni drink ha:
-     id            -> identificativo unico
-     name          -> nome mostrato come risposta corretta
-     aliases       -> nomi alternativi accettati come risposta corretta
-                      (es. "gin lemon" e "vodka lemon" per lo stesso drink)
-     molecules     -> array di id di MOLECULES (NON includere mai water/ethanol,
-                      vengono aggiunte automaticamente e nascoste dal motore)
-     moleculeNotes -> breve descrizione di ogni molecola nel contesto di
-                      QUESTO drink, mostrata nel pop-up soluzione finale.
-                      Chiave = id della molecola, valore = testo breve.
-     quizOptions   -> le 4 opzioni mostrate con l'Aiuto 1 "Mostra 4 opzioni".
-                      SCRITTE A MANO (non generate a caso): metti il nome
-                      corretto del drink + 3 alternative plausibili, in
-                      qualsiasi ordine (vengono mescolate a schermo).
-     tip           -> frase finale mostrata nel riquadro "💡" del pop-up
-                      soluzione (facoltativa)
-     image         -> percorso dell'illustrazione SVG (o di una tua foto,
-                      vedi README per come sostituirla)
-     difficulty    -> 1-5, mostrata come stelline nel pop-up soluzione
    ------------------------------------------------------------------------- */
 
 const DRINKS = [
@@ -270,19 +192,19 @@ const DRINKS = [
     difficulty: 1
   },
   {
-      id: 'gin-tonic',
-      name: 'Gin Tonic',
-      aliases: ['gin tonic', 'gintonic', 'vodka tonic', 'vodkatonic'],
-      molecules: ['quinine', 'co2', 'limonene'],
-      moleculeNotes: {
-        quinine: 'Chinino: la molecola simbolo dell\'acqua tonica.',
-        co2: 'Anidride carbonica: rende frizzante la tonica.',
-        limonene: 'Limonene: aroma della scorza di limone o lime.'
-      },
-      quizOptions: ['Gin Tonic', 'Vodka Lemon', 'Moscow Mule', 'Negroni'],
-      tip: 'Il chinino è praticamente la firma chimica del Gin Tonic.',
-      image: 'assets/drinks/gin_tonic.webp',
-      difficulty: 1
+    id: 'gin-tonic',
+    name: 'Gin Tonic',
+    aliases: ['gin tonic', 'gintonic', 'vodka tonic', 'vodkatonic'],
+    molecules: ['quinine', 'co2', 'limonene'],
+    moleculeNotes: {
+      quinine: 'Chinino: la molecola simbolo dell\'acqua tonica.',
+      co2: 'Anidride carbonica: rende frizzante la tonica.',
+      limonene: 'Limonene: aroma della scorza di limone o lime.'
+    },
+    quizOptions: ['Gin Tonic', 'Vodka Lemon', 'Moscow Mule', 'Negroni'],
+    tip: 'Il chinino è praticamente la firma chimica del Gin Tonic.',
+    image: 'assets/drinks/gin_tonic.webp',
+    difficulty: 1
   },
   {
     id: 'mojito',
@@ -360,7 +282,7 @@ const DRINKS = [
     image: 'assets/drinks/whiskey_sour.webp',
     difficulty: 3
   },
-{
+  {
     id: 'bloody-mary',
     name: 'Bloody Mary',
     aliases: ['bloody mary'],
@@ -405,43 +327,26 @@ const DRINKS = [
     image: 'assets/drinks/pina_colada.webp',
     difficulty: 5
   },
-    {
-      id: 'negroni',
-      name: 'Negroni',
-      aliases: ['negroni'],
-      molecules: ['limonene', 'linalool', 'caryophyllene'],
-      moleculeNotes: {
-        limonene: 'Limonene: aroma agrumato della scorza d\'arancia.',
-        linalool: 'Linalolo: nota floreale tipica del gin e del vermouth.',
-        caryophyllene: 'β-Cariofillene: composto aromatico presente in molte spezie e botaniche del bitter.'
-      },
-      quizOptions: ['Negroni', 'Americano', 'Gin Tonic', 'Spritz'],
-      tip: 'Nessuna molecola è esclusiva del Negroni, ma l\'insieme delle botaniche lo rende riconoscibile.',
-      image: 'assets/drinks/negroni.webp',
-      difficulty: 5
-    }
-  /* Aggiungi qui altri drink seguendo lo stesso schema... */
+  {
+    id: 'negroni',
+    name: 'Negroni',
+    aliases: ['negroni'],
+    molecules: ['limonene', 'linalool', 'caryophyllene'],
+    moleculeNotes: {
+      limonene: 'Limonene: aroma agrumato della scorza d\'arancia.',
+      linalool: 'Linalolo: nota floreale tipica del gin e del vermouth.',
+      caryophyllene: 'β-Cariofillene: composto aromatico presente in molte spezie e botaniche del bitter.'
+    },
+    quizOptions: ['Negroni', 'Americano', 'Gin Tonic', 'Spritz'],
+    tip: 'Nessuna molecola è esclusiva del Negroni, ma l\'insieme delle botaniche lo rende riconoscibile.',
+    image: 'assets/drinks/negroni.webp',
+    difficulty: 5
+  }
 ];
 
 
 /* -------------------------------------------------------------------------
-   3) BANCA DOMANDE A RISPOSTA MULTIPLA (per temi)
-   -------------------------------------------------------------------------
-   Costanti pure: qui dentro metti solo le domande, divise per TEMA. Poi,
-   nella sezione ROUNDS qui sotto, decidi quali usare — a mano (una precisa)
-   o a caso (con pickRandomQuestions / pickRandomQuestionsFromThemes,
-   definite in js/engine.js). In futuro l'utente potrà scegliere il tema
-   del quiz da qui: aggiungere un nuovo tema è semplice, vedi sotto.
-
-   Ogni tema ha:
-     label      -> nome mostrato (es. come titolo delle sue manche)
-     questions  -> array di { question, options, correctIndex }
-                   correctIndex è l'indice (da 0) della risposta giusta
-                   dentro "options" — NON serve scrivere "A. / B. / ecc",
-                   solo il testo della risposta.
-
-   Per aggiungere un nuovo tema: copia un blocco, cambia la chiave
-   (es. "storia_dell_arte") e riempilo con le tue domande.
+   3) BANCA DOMANDE A RISPOSTA MULTIPLA
    ------------------------------------------------------------------------- */
 
 const QUESTION_THEMES = {
@@ -657,47 +562,19 @@ const QUESTION_THEMES = {
       }
     ]
   }
-
-  /* Aggiungi qui altri temi seguendo lo stesso schema... */
 };
 
 
 /* -------------------------------------------------------------------------
-   4) GIOCHI (GAMES)
+   4) GIOCHI
    -------------------------------------------------------------------------
-   Il sito è diviso in GIOCHI: l'utente li sceglie nell'ordine che vuole
-   dalla schermata principale. Ogni gioco ha le sue manche (esattamente
-   come prima, stessi 4 tipi: molecule-guess / multiple-choice / matching /
-   image-zoom — vedi schema sotto) e un "peso" percentuale che determina
-   quanto conta sul VOTO FINALE (il "VERDETTO", da 0 a 110, promozione a 66).
-   I pesi di tutti i giochi devono sommare a 100.
-
-   Ogni gioco ha:
-     id      -> identificativo unico
-     label   -> testo del bottone nella schermata di selezione
-     icon    -> emoji mostrata accanto al bottone
-     weight  -> quanto pesa in percentuale sul voto finale (somma = 100)
-     intro   -> { title, text } mostrati in una schermata prima di iniziare
-                (spiegazione/regole del gioco, con bottone "Inizia la prova")
-     rounds  -> array di manche, stesso identico formato di prima:
-
-     a) "molecule-guess"  -> { type: 'molecule-guess', title: '...', drinkId: 'id-del-drink' }
-     b) "multiple-choice" -> { type:'multiple-choice', title, question, options, correctIndex }
-                              (scritta a mano oppure pescata da QUESTION_THEMES,
-                              vedi makeMultipleChoiceRound/pickRandomQuestions
-                              in js/engine.js)
-     c) "matching"        -> { type:'matching', title, instructions, pairs:[{name,image}] }
-     d) "image-zoom"      -> { type:'image-zoom', title, image, answer, aliases,
-                              zoomFocus:{x,y}, startZoom, zoomStep, minZoom }
-
-   Per aggiungere un NUOVO gioco: copia un blocco qui sotto, dagli un id
-   univoco, scrivi le sue manche e ricorda di far tornare la somma dei
-   "weight" a 100 (altrimenti il voto finale sarà semplicemente scalato
-   in automatico, ma è più pulito tenerli allineati a 100).
+   I giochi con rounds generati casualmente usano buildRounds() — una
+   funzione che viene chiamata all'avvio del gioco (in engine.js/initGame),
+   così ogni partita ha domande diverse.
+   I giochi con rounds fissi (matching, splash) li definiscono direttamente.
    ------------------------------------------------------------------------- */
 
 const GAMES = [
-
   {
     id: 'drink-guess',
     label: 'Che drink è?',
@@ -707,18 +584,8 @@ const GAMES = [
       title: 'Che drink è?',
       text: 'A cosa serve studiare per anni chimica se poi non sai nemmeno riconoscere un drink? Metti caso che poi ti regalo della droga mettendoci dentro qualche pastiglietta, sarebbe scortese non capire di che stupefacente si tratta, o no? Per ora lasciamo da parte le nostre sostanze psicoattive preferite e dedichiamoci all\'alcol in tutte le sue forme e colori.<br><br>In ogni manche ti saranno mostrate delle molecole caratteristiche di un cocktail: formula chimica e struttura scheletrica. Indovina di che bevanda si tratta!<br><br>Ps. Acqua ed etanolo non contano: sono in ogni drink alcolico. <br>Bloccato? Hai 2 aiuti a manche... ma per riceverli devi bere! 🍹'
     },
-    rounds: pickRandomDrinkRounds(5, 'Campioni')
-    /*rounds: [
-      { type: 'molecule-guess', title: 'Manche 1 — Campioni', drinkId: 'vodka-lemon' },
-      { type: 'molecule-guess', title: 'Manche 2 — Campioni', drinkId: 'mojito' },
-      { type: 'molecule-guess', title: 'Manche 3 — Campioni', drinkId: 'tequila-sale-limone' },
-      { type: 'molecule-guess', title: 'Manche 4 — Campioni', drinkId: 'cuba-libre' },
-      { type: 'molecule-guess', title: 'Manche 5 — Campioni', drinkId: 'beer' },
-      { type: 'molecule-guess', title: 'Manche 6 — Campioni', drinkId: 'bloody-mary' },
-      { type: 'molecule-guess', title: 'Manche 7 — Campioni', drinkId: 'negroni' }
-    ]*/
+    buildRounds() { return pickRandomDrinkRounds(5, 'Campioni'); }
   },
-
   {
     id: 'quiz-chimica',
     label: 'Quante ne sai — Chimica Edition',
@@ -728,9 +595,8 @@ const GAMES = [
       title: 'Quante ne sai — Chimica Edition',
       text: 'Passiamo a qualche domanda più specifica, sono certo che per te sarà una passeggiata.<br><br>Troverai una serie di domande, tra le molteplici risposte solo una è esatta. <br>Ma hai un solo tentativo per azzeccare quale.'
     },
-    rounds: pickRandomQuestions('chimica_laboratorio', 5, 'Chimica')
+    buildRounds() { return pickRandomQuestions('chimica_laboratorio', 5, 'Chimica'); }
   },
-
   {
     id: 'quiz-biologia',
     label: 'Quante ne sai — Biologia Edition',
@@ -740,9 +606,8 @@ const GAMES = [
       title: 'Quante ne sai — Biologia Edition',
       text: 'Ecco una serie di domande di biologia marina, pescate a caso dal nostro banco. <br>Per ogni domanda hai un solo tentativo.'
     },
-    rounds: pickRandomQuestions('biologia_marina', 5, 'Biologia marina')
+    buildRounds() { return pickRandomQuestions('biologia_marina', 5, 'Biologia marina'); }
   },
-
   {
     id: 'matching',
     label: "Trova l'associazione",
@@ -753,20 +618,20 @@ const GAMES = [
       text: 'Il cervello umano si è evoluto per milioni di anni in modo da trovare con semplicità associazioni tra concetti basilari. <br>Come "Fuoco" → "Calore", "Gattini" → "Video buffi su internet", "Donna" → "Cucina".<br><br>Ma ora è giunto il momento di dimostrare quanto l\'evoluzione non possa nulla contro la tua ignoranza. O forse ci sorprenderai?<br><br>Associa ogni testo alla corrispettiva immagine, puoi sbagliare quante volte vuoi: <b>l\'importante è bere quando lo fai</b>. <br>Ma occhio, gli errori influiranno il voto finale.'
     },
     rounds: [
-    {
-            type: 'matching',
-            title: 'Prova di associazione',
-            instructions: 'Associa ogni scritta alla relativa immagine.',
-            pairs: [
-                { name: '12', image: 'assets/matching-demo/12.png' },
-                { name: '6', image: 'assets/matching-demo/6.png' },
-                { name: '42', image: 'assets/matching-demo/42.png' },
-                { name: '74', image: 'assets/matching-demo/74.webp' },
-                { name: 'Dottore', image: 'assets/matching-demo/dottore.png' },
-                { name: 'Paghi 1?', image: 'assets/matching-demo/paghi.png' },
-                { name: 'Zago', image: 'assets/matching-demo/troll.png' }
-            ]
-          },
+      {
+        type: 'matching',
+        title: 'Prova di associazione',
+        instructions: 'Associa ogni scritta alla relativa immagine.',
+        pairs: [
+          { name: '12', image: 'assets/matching-demo/12.png' },
+          { name: '6', image: 'assets/matching-demo/6.png' },
+          { name: '42', image: 'assets/matching-demo/42.png' },
+          { name: '74', image: 'assets/matching-demo/74.webp' },
+          { name: 'Dottore', image: 'assets/matching-demo/dottore.png' },
+          { name: 'Paghi 1?', image: 'assets/matching-demo/paghi.png' },
+          { name: 'Zago', image: 'assets/matching-demo/troll.png' }
+        ]
+      },
       {
         type: 'matching',
         title: 'Prova di associazione',
@@ -780,12 +645,9 @@ const GAMES = [
           { name: 'Macrocheira kaempferi', image: 'assets/matching-demo/Spider_crab.webp' },
           { name: 'Thunnus albacares', image: 'assets/matching-demo/Tonno_Pinnagialla.webp' }
         ]
-      },
-      /* Aggiungi qui altri oggetti { type:'matching', ... } per avere più
-         di una prova di associazione in questo stesso gioco. */
+      }
     ]
   },
-
   {
     id: 'splash',
     label: 'Splash',
@@ -812,23 +674,12 @@ const GAMES = [
         title: 'Prova splash',
         image: 'assets/zoom/ciccio.jpeg',
         answer: 'CiccioGamer89',
-        aliases: ['cicciogamer89', 'ciccio', 'cicciogamer', 'zago' ],
+        aliases: ['cicciogamer89', 'ciccio', 'cicciogamer', 'zago'],
         zoomFocus: { x: 100, y: 50 },
         startZoom: 5,
         zoomStep: 1.2,
         minZoom: 1
       },
-//      {
-//        type: 'image-zoom',
-//        title: 'Prova splash',
-//        image: 'assets/zoom/duce.jpeg',
-//        answer: 'Benito Mussolini',
-//        aliases: ['duce', 'dux', 'maiale', 'mussolini', 'benito', 'zago'],
-//        zoomFocus: { x: 40, y: 0 },
-//        startZoom: 4,
-//        zoomStep: 1,
-//        minZoom: 1
-//      },
       {
         type: 'image-zoom',
         title: 'Prova splash',
@@ -856,27 +707,12 @@ const GAMES = [
         title: 'Prova splash',
         image: 'assets/zoom/pelato.jpeg',
         answer: 'Johnny Sins',
-        aliases: ['Sins', 'pelato', 'il pelato', 'il pelato di brazzers','zago'],
+        aliases: ['Sins', 'pelato', 'il pelato', 'il pelato di brazzers', 'zago'],
         zoomFocus: { x: 50, y: 80 },
         startZoom: 4,
         zoomStep: 1,
         minZoom: 1
       }
-//      ,
-//      {
-//        type: 'image-zoom',
-//        title: 'Prova splash',
-//        image: 'assets/zoom/aang.jpeg',
-//        answer: 'Aang',
-//        aliases: ['avatar','zago'],
-//        zoomFocus: { x: 90, y: 78 },
-//        startZoom: 5,
-//        zoomStep: 1,
-//        minZoom: 1
-//      }
-
-      /* Aggiungi qui altri oggetti { type:'image-zoom', ... } per avere più
-         di una prova "splash" in questo stesso gioco. */
     ]
   }
 ];

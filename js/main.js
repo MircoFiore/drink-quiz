@@ -12,69 +12,14 @@
                -> torna a showHubScreen()
      Quando tutti i giochi sono stati giocati, showHubScreen() mostra anche
      il bottone "VERDETTO" -> showVerdictScreen().
+   Dipende da: constants.js, engine.js, ui.js, renderers.js, data.js.
    ========================================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
   resetSession();
+  initTooltipListeners();
+  initMobileKeyboardScroll();
   showHubScreen();
-
-  document.addEventListener('focusin', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-      setTimeout(() => {
-        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 350);
-    }
-  });
-
-  let activeBubble = null;
-
-  function showTooltip(el) {
-    hideTooltip();
-    const text = el.getAttribute('data-tooltip');
-    if (!text) return;
-    const bubble = document.createElement('div');
-    bubble.className = 'tooltip-bubble';
-    bubble.textContent = text;
-    document.body.appendChild(bubble);
-    activeBubble = bubble;
-
-    const rect = el.getBoundingClientRect();
-    const bw = bubble.offsetWidth;
-    const bh = bubble.offsetHeight;
-    const gap = 10;
-
-    let top = rect.bottom + gap;
-    let left = rect.left + rect.width / 2 - bw / 2;
-
-    if (top + bh > window.innerHeight) {
-      top = rect.top - bh - gap;
-    }
-
-    if (left < 8) left = 8;
-    if (left + bw > window.innerWidth - 8) left = window.innerWidth - 8 - bw;
-
-    bubble.style.top = top + 'px';
-    bubble.style.left = left + 'px';
-  }
-
-  function hideTooltip() {
-    if (activeBubble) { activeBubble.remove(); activeBubble = null; }
-  }
-
-  document.addEventListener('pointerover', (e) => {
-    const el = e.target.closest('[data-tooltip]');
-    if (el) showTooltip(el);
-  });
-  document.addEventListener('pointerout', (e) => {
-    const el = e.target.closest('[data-tooltip]');
-    if (el) hideTooltip();
-  });
-  document.addEventListener('click', (e) => {
-    const el = e.target.closest('[data-tooltip]');
-    if (el) { showTooltip(el); e.preventDefault(); }
-    else hideTooltip();
-  });
-  document.addEventListener('scroll', hideTooltip, true);
 });
 
 
@@ -87,7 +32,28 @@ function showHubScreen() {
   const stage = document.getElementById('stage');
   const firstVisit = Session.playedGameIds.length === 0;
 
-  const introHTML = firstVisit ? `
+  stage.innerHTML = `
+    <div class="round-card hub-card">
+      ${firstVisit ? buildHubIntroHTML() : buildHubReturnHTML()}
+      <div class="game-list">${buildGameButtonsHTML()}</div>
+      ${allGamesPlayed() ? '<button id="verdict-btn" class="btn btn-primary btn-large verdict-cta">🎓 VERDETTO</button>' : ''}
+      ${!firstVisit ? '<button id="restart-session-btn" class="btn-link">Ricomincia da capo</button>' : ''}
+    </div>
+  `;
+
+  stage.querySelectorAll('.game-btn[data-game]').forEach(btn => {
+    btn.addEventListener('click', () => showGameIntroScreen(getGameDef(btn.dataset.game)));
+  });
+
+  const verdictBtn = document.getElementById('verdict-btn');
+  if (verdictBtn) verdictBtn.addEventListener('click', showVerdictScreen);
+
+  const restartBtn = document.getElementById('restart-session-btn');
+  if (restartBtn) restartBtn.addEventListener('click', () => { resetSession(); showHubScreen(); });
+}
+
+function buildHubIntroHTML() {
+  return `
     <h1 class="round-heading big">Test di Laurea - Sei veramente un dottore?</h1>
     <p class="intro-text">
       Ci si può fidare del parere di qualche vecchio bavoso nell'università
@@ -103,26 +69,28 @@ function showHubScreen() {
       ricopre.
     </p>
     <p class="intro-text"><strong>Iniziamo:</strong></p>
-  ` : `
+  `;
+}
+
+function buildHubReturnHTML() {
+  return `
     <div class="eyebrow">Prove completate: ${Session.playedGameIds.length} di ${GAMES.length}</div>
     <h1 class="round-heading big">Scegli la prossima sfida</h1>
   `;
+}
 
-  const gameButtonsHTML = GAMES.map(game => {
+function buildGameButtonsHTML() {
+  return GAMES.map(game => {
     const played = Session.playedGameIds.includes(game.id);
     if (played) {
       const result = Session.gameResults[game.id];
-      const isQuiz = result.stats.every(s => s.type === 'multiple-choice');
-      const scoreText = isQuiz
-        ? `${result.stats.filter(s => s.points > 0).length}/${result.stats.length} corrette`
-        : `${result.totalScore}/${result.maxScore} pt`;
       return `
         <div class="game-btn completed">
           <div class="game-btn-center">
             <span class="icon">${game.icon}</span>
             <span>${game.label}</span>
           </div>
-          <span class="score-badge">${scoreText}</span>
+          <span class="score-badge">${formatScoreText(result)}</span>
         </div>
       `;
     }
@@ -133,40 +101,6 @@ function showHubScreen() {
       </button>
     `;
   }).join('');
-
-  const verdictHTML = allGamesPlayed() ? `
-    <button id="verdict-btn" class="btn btn-primary btn-large verdict-cta">🎓 VERDETTO</button>
-  ` : '';
-
-  const restartHTML = !firstVisit ? `
-    <button id="restart-session-btn" class="btn-link">Ricomincia da capo</button>
-  ` : '';
-
-  const stageEl = stage;
-  stageEl.innerHTML = `
-    <div class="round-card hub-card">
-      ${introHTML}
-      <div class="game-list">${gameButtonsHTML}</div>
-      ${verdictHTML}
-      ${restartHTML}
-    </div>
-  `;
-
-  stage.querySelectorAll('.game-btn[data-game]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const game = getGameDef(btn.dataset.game);
-      showGameIntroScreen(game);
-    });
-  });
-
-  const verdictBtn = document.getElementById('verdict-btn');
-  if (verdictBtn) verdictBtn.addEventListener('click', showVerdictScreen);
-
-  const restartBtn = document.getElementById('restart-session-btn');
-  if (restartBtn) restartBtn.addEventListener('click', () => {
-    resetSession();
-    showHubScreen();
-  });
 }
 
 
@@ -213,50 +147,57 @@ function goToNextRoundOrFinishGame() {
 
 function showGameRecapScreen() {
   const result = finishCurrentGame();
-  const hasHints = result.stats.some(s => s.type === 'molecule-guess');
-  const isQuiz = result.stats.every(s => s.type === 'multiple-choice');
   document.getElementById('round-counter').textContent = 'Prova completata';
-
-  let headingHTML, summaryHTML, theadHTML, rows;
-
-  if (isQuiz) {
-    const correct = result.stats.filter(s => s.points > 0).length;
-    headingHTML = `Risposte corrette: ${correct} / ${result.stats.length}`;
-    summaryHTML = `${Math.round(result.percentage)}% di questa prova superato.`;
-    theadHTML = '<tr><th>Domanda</th><th>Esito</th></tr>';
-    rows = result.stats.map(s => `
-      <tr>
-        <td>${s.title}</td>
-        <td>${s.points > 0 ? '✅ Corretta' : '❌ Sbagliata'}</td>
-      </tr>
-    `).join('');
-  } else {
-    headingHTML = `Punteggio: ${result.totalScore} / ${result.maxScore} pt`;
-    summaryHTML = `${Math.round(result.percentage)}% di questa prova superato.`;
-    theadHTML = `<tr><th>Manche</th><th>Punti</th>${hasHints ? '<th>Aiuti (drink bevuti)</th>' : ''}</tr>`;
-    rows = result.stats.map(s => `
-      <tr>
-        <td>${s.title}</td>
-        <td>${s.points} pt</td>
-        ${hasHints ? `<td>${s.hintsUsed}</td>` : ''}
-      </tr>
-    `).join('');
-  }
 
   const stage = document.getElementById('stage');
   stage.innerHTML = `
     <div class="round-card final-card">
       <div class="eyebrow">${result.label}</div>
-      <h1 class="round-heading big">${headingHTML}</h1>
-      <p class="intro-text">${summaryHTML}</p>
+      <h1 class="round-heading big">${buildRecapHeading(result)}</h1>
+      <p class="intro-text">${Math.round(result.percentage)}% di questa prova superato.</p>
       <table class="stats-table">
-        <thead>${theadHTML}</thead>
-        <tbody>${rows}</tbody>
+        <thead>${buildRecapTableHead(result)}</thead>
+        <tbody>${buildRecapTableRows(result)}</tbody>
       </table>
       <button id="recap-continue-btn" class="btn btn-primary btn-large">Continua →</button>
     </div>
   `;
   document.getElementById('recap-continue-btn').addEventListener('click', showHubScreen);
+}
+
+function buildRecapHeading(result) {
+  if (isQuizResult(result)) {
+    const correct = result.stats.filter(s => s.points > 0).length;
+    return `Risposte corrette: ${correct} / ${result.stats.length}`;
+  }
+  return `Punteggio: ${result.totalScore} / ${result.maxScore} pt`;
+}
+
+function buildRecapTableHead(result) {
+  if (isQuizResult(result)) {
+    return '<tr><th>Domanda</th><th>Esito</th></tr>';
+  }
+  const hasHints = result.stats.some(s => s.type === 'molecule-guess');
+  return `<tr><th>Manche</th><th>Punti</th>${hasHints ? '<th>Aiuti (drink bevuti)</th>' : ''}</tr>`;
+}
+
+function buildRecapTableRows(result) {
+  if (isQuizResult(result)) {
+    return result.stats.map(s => `
+      <tr>
+        <td>${s.title}</td>
+        <td>${s.points > 0 ? '✅ Corretta' : '❌ Sbagliata'}</td>
+      </tr>
+    `).join('');
+  }
+  const hasHints = result.stats.some(s => s.type === 'molecule-guess');
+  return result.stats.map(s => `
+    <tr>
+      <td>${s.title}</td>
+      <td>${s.points} pt</td>
+      ${hasHints ? `<td>${s.hintsUsed}</td>` : ''}
+    </tr>
+  `).join('');
 }
 
 
@@ -268,63 +209,12 @@ function showVerdictScreen() {
   const verdict = computeVerdict();
   document.getElementById('round-counter').textContent = 'Verdetto finale';
 
-  const rows = GAMES.map(gameDef => {
-    const result = Session.gameResults[gameDef.id];
-    if (!result) return '';
-    return `
-      <tr>
-        <td>${gameDef.icon} ${gameDef.label}</td>
-        <td>${Math.round(result.percentage)}%</td>
-        <td>${gameDef.weight}%</td>
-      </tr>
-    `;
-  }).join('');
-
   const verdictClass = verdict.passed ? 'verdict-pass' : 'verdict-fail';
-
   const bodyText = verdict.lode
-    ? `<p class="diploma-body">
-        La Commissione, avendo esaminato con la dovuta attenzione e solennità
-        le prove sostenute dal candidato, <strong>dichiara all'unanimità</strong>
-        che il medesimo ha dimostrato una conoscenza <em>straordinaria</em>
-        delle arti miscelatorie e delle scienze affini, conseguendo il
-        punteggio massimo con lode.
-      </p>
-      <p class="diploma-body">
-        Si conferisce pertanto il titolo di <strong>Dottore Emerito in Scienze
-        del Beverage</strong>, con tutti gli onori e i privilegi che ne derivano.
-        Anche i vecchi bavosi di Padova si inchinano.
-      </p>`
+    ? VERDICT_TEXT_LODE
     : verdict.passed
-      ? `<p class="diploma-body">
-          La Commissione, riunita in seduta straordinaria presso il Dipartimento
-          di Scienze Chimiche, della Vita e della Sostenibilità Ambientale,
-          avendo valutato le prove sostenute dal candidato, <strong>delibera</strong>
-          quanto segue:
-        </p>
-        <p class="diploma-body">
-          Il candidato ha dimostrato sufficiente padronanza delle discipline
-          oggetto d'esame. Si conferisce pertanto il titolo di
-          <strong>Dottore in Scienze del Beverage</strong>,
-          con decorrenza immediata e validità a tempo indeterminato
-          (salvo revoca per manifesta incompetenza al bancone).
-        </p>`
-      : `<p class="diploma-body">
-          La Commissione, riunita in seduta straordinaria presso il Dipartimento
-          di Scienze Chimiche, della Vita e della Sostenibilità Ambientale,
-          avendo valutato le prove sostenute dal candidato, <strong>delibera</strong>
-          quanto segue:
-        </p>
-        <p class="diploma-body">
-          Il candidato <strong>non ha raggiunto</strong> la soglia minima richiesta
-          per il conferimento del titolo. Si invita il candidato a ripresentare
-          domanda di laurea presso la Segreteria Studenti, previo ulteriore
-          studio e frequentazione assidua dei migliori locali della città.
-        </p>
-        <p class="diploma-body diploma-note">
-          N.B. La Commissione suggerisce un periodo di tirocinio pratico
-          non inferiore a 30 aperitivi prima di ripresentarsi all'esame.
-        </p>`;
+      ? VERDICT_TEXT_PASS
+      : VERDICT_TEXT_FAIL;
 
   const stage = document.getElementById('stage');
   stage.innerHTML = `
@@ -336,7 +226,6 @@ function showVerdictScreen() {
       </div>
 
       <h1 class="diploma-title">${verdict.passed ? 'Diploma di Laurea' : 'Verbale di Esame'}</h1>
-
       <div class="verdict-score ${verdictClass}">${verdict.finalScore} / 110${verdict.lode ? ' e Lode' : ''}</div>
 
       ${bodyText}
@@ -344,10 +233,8 @@ function showVerdictScreen() {
       <details class="diploma-details">
         <summary>Dettaglio prove sostenute</summary>
         <table class="stats-table">
-          <thead>
-            <tr><th>Prova</th><th>Risultato</th><th>Peso</th></tr>
-          </thead>
-          <tbody>${rows}</tbody>
+          <thead><tr><th>Prova</th><th>Risultato</th><th>Peso</th></tr></thead>
+          <tbody>${buildVerdictTableRows()}</tbody>
         </table>
       </details>
 
@@ -369,4 +256,18 @@ function showVerdictScreen() {
     resetSession();
     showHubScreen();
   });
+}
+
+function buildVerdictTableRows() {
+  return GAMES.map(gameDef => {
+    const result = Session.gameResults[gameDef.id];
+    if (!result) return '';
+    return `
+      <tr>
+        <td>${gameDef.icon} ${gameDef.label}</td>
+        <td>${Math.round(result.percentage)}%</td>
+        <td>${gameDef.weight}%</td>
+      </tr>
+    `;
+  }).join('');
 }
