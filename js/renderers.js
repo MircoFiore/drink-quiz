@@ -211,7 +211,7 @@ function renderMoleculeGuess(round, stage) {
     if (isCorrectDrinkAnswer(drink, text)) {
       completeRound();
       feedback.className = 'feedback correct';
-      feedback.textContent = `Esatto! Era ${drink.name}. 🎉`;
+      feedback.textContent = `Corretto! Era ${drink.name}.`;
       document.getElementById('mg-form').querySelectorAll('input,button').forEach(el => el.disabled = true);
       document.querySelectorAll('#mg-options .btn-option').forEach(el => el.disabled = true);
       document.querySelectorAll('.mol-name').forEach(el => el.classList.remove('hidden'));
@@ -322,7 +322,7 @@ function renderMultipleChoice(round, stage) {
       if (idx === round.correctIndex) {
         completeRound(100);
         feedback.className = 'feedback correct';
-        feedback.textContent = 'Esatto! 🎉';
+        feedback.textContent = 'Corretto!';
       } else {
         btn.classList.add('wrong');
         completeRound(0);
@@ -623,7 +623,7 @@ function renderImageZoom(round, stage) {
       zoom = minZoom;
       img.style.transform = `scale(${zoom})`;
       feedback.className = 'feedback correct';
-      feedback.textContent = `Esatto! Era ${round.answer}. 🎉`;
+      feedback.textContent = `Corretto! Era ${round.answer}.`;
       document.getElementById('zoom-form').querySelectorAll('input,button').forEach(el => el.disabled = true);
       revealNext();
     } else {

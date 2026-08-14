@@ -886,6 +886,13 @@ body {
     flex-direction: row;
     gap: 10px;
   }
+  .game-btn.completed {
+    flex-direction: column;
+    padding: 10px 14px;
+  }
+  .game-btn.completed .score-badge {
+    margin-top: 4px;
+  }
   .mol-card {
     width: 100%;
     display: flex;
