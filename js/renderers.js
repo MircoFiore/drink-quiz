@@ -5,74 +5,55 @@
    #stage e collega gli eventi. Per creare un NUOVO tipo di manche:
      1) scegli un nome per round.type (es. 'true-false')
      2) scrivi una funzione renderTrueFalse(round)
-     3) aggiungila allo switch in renderRound()
+     3) aggiungila a RENDERERS
+   Dipende da: constants.js, engine.js, ui.js, molecule-art.js, data.js.
    ========================================================================= */
+
+
+/* ---------- dispatcher ---------- */
+
+const RENDERERS = {
+  'molecule-guess': renderMoleculeGuess,
+  'multiple-choice': renderMultipleChoice,
+  'matching':        renderMatching,
+  'image-zoom':      renderImageZoom
+};
 
 function renderRound(round) {
   const stage = document.getElementById('stage');
   stage.innerHTML = '';
+
   const gameDef = getGameDef(Game.gameId);
   document.getElementById('round-counter').textContent =
     `${gameDef ? gameDef.label + ' · ' : ''}Manche ${Game.roundIndex + 1} di ${Game.rounds.length}`;
 
-  if (round.type === 'molecule-guess') renderMoleculeGuess(round, stage);
-  else if (round.type === 'multiple-choice') renderMultipleChoice(round, stage);
-  else if (round.type === 'matching') renderMatching(round, stage);
-  else if (round.type === 'image-zoom') renderImageZoom(round, stage);
-  else stage.innerHTML = `<p>Tipo di manche sconosciuto: ${round.type}</p>`;
-}
-
-/* ---------- helper condivisi ---------- */
-
-function tooltipIcon(text) {
-  return `<span class="info-icon" tabindex="0" data-tooltip="${text}">i</span>`;
+  const renderer = RENDERERS[round.type];
+  if (renderer) {
+    renderer(round, stage);
+  } else {
+    stage.innerHTML = `<p>Tipo di manche sconosciuto: ${round.type}</p>`;
+  }
 }
 
 
-
-const WRONG_DRINK_MESSAGES = [
-  'Non è questo il drink, riprova!',
-  'Non ci sei andato nemmeno vicino.',
-  'Ma sei astemio o solo stupido?',
-  'Da sobrio non ce la fai proprio, prova a bere un goccio!',
-  'Noup, vuoi provare a chiedere una mano alla mamma?',
-  'Oggigiorno le lauree le regalano con le patatine.',
-  'Ti serve un ripasso? Prova qui: https://it.wikipedia.org/wiki/Molecola',
-  'Acqua, acqua, fuochino…',
-  'Questa volta hai solo miss-clickato, vero?',
-  '🦕 Ah ah ah! You didn\'t say the magic word! 🦖',
-  'Prova con "latte materno"!',
-  'Sei ancora in tempo per ritirarti',
-  'Se vuoi uscire da questa brutta situazione puoi sempre fingere un malore'
-];
+/* ---------- messaggi di errore ---------- */
 
 function randomWrongDrinkMessage() {
   return WRONG_DRINK_MESSAGES[Math.floor(Math.random() * WRONG_DRINK_MESSAGES.length)];
 }
-
-const WRONG_QUIZ_MESSAGES = [
-  'Sbagliato, se lo sapessero i tuoi insegnanti non staremmo festeggiando oggi!',
-  'No! Non capisco se hai bevuto troppo o troppo poco.',
-  'Forse dovresti darti alla Biologia Marina.',
-  'Questa non la sai, ma scommetto che conosci tutti i champion di LOL.',
-  'Forse non hai capito le regole del gioco, devi premere quella esatta!',
-  'Se tu sei quello sveglio della famiglia, ho paura di sapere come sono messi gli altri',
-  'Ti darei 104 motivi per cui hai sbagliato, ma sarà per la prossima volta',
-  'Oltre a essere ignorante sei anche sfortunato, 1/4 non è così difficile da indovinare'
-];
 
 let wrongQuizPool = [];
 
 function randomWrongQuizMessage() {
   if (wrongQuizPool.length === 0) {
     wrongQuizPool = [...WRONG_QUIZ_MESSAGES];
-    for (let i = wrongQuizPool.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [wrongQuizPool[i], wrongQuizPool[j]] = [wrongQuizPool[j], wrongQuizPool[i]];
-    }
+    shuffleArray(wrongQuizPool);
   }
   return wrongQuizPool.pop();
 }
+
+
+/* ---------- helper navigazione ---------- */
 
 function nextButtonHTML() {
   const label = isLastRound() ? 'Vedi risultato prova →' : 'Prossima manche →';
@@ -80,8 +61,7 @@ function nextButtonHTML() {
 }
 
 function wireNextButton() {
-  const btn = document.getElementById('next-btn');
-  btn.addEventListener('click', goToNextRoundOrFinishGame);
+  document.getElementById('next-btn').addEventListener('click', goToNextRoundOrFinishGame);
 }
 
 function revealNext() {
@@ -96,8 +76,16 @@ function revealNext() {
 
 function renderMoleculeGuess(round, stage) {
   const drink = DRINKS.find(d => d.id === round.drinkId);
-  const molecules = drink.molecules.map(id => MOLECULES[id]);
+  const molecules = drink.molecules.map(key => ({ key, ...MOLECULES[key] }));
 
+  stage.innerHTML = buildMoleculeGuessHTML(drink, molecules);
+
+  initMoleculeGuessHints(drink, molecules, stage);
+  initMoleculeGuessCards(stage);
+  initMoleculeGuessForm(drink, molecules, stage);
+}
+
+function buildMoleculeGuessHTML(drink, molecules) {
   const moleculeCards = molecules.map((mol, i) => `
     <div class="mol-card" role="button" tabindex="0" style="--flask-color:${mol.color.hex}" data-structure="${mol.structure}" data-formula="${mol.formula}" data-molname="${mol.name}">
       <div class="mol-left">
@@ -111,7 +99,7 @@ function renderMoleculeGuess(round, stage) {
     </div>
   `).join('');
 
-  stage.innerHTML = `
+  return `
     <div class="round-card question-card">
       <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
       <div class="heading-row">
@@ -145,24 +133,25 @@ function renderMoleculeGuess(round, stage) {
       <div id="mg-feedback" class="feedback"></div>
     </div>
   `;
+}
 
-  const feedback = document.getElementById('mg-feedback');
-  const clearFeedback = () => {
-    feedback.textContent = '';
-    feedback.className = 'feedback';
-  };
-
+function initMoleculeGuessHints(drink, molecules, stage) {
   document.getElementById('hint1-btn').addEventListener('click', () => {
     if (Game.roundLocked) return;
-    clearFeedback();
+    clearFeedback('mg-feedback');
     registerHintUsed();
+
     const options = getManualOptionsForDrink(drink);
     const box = document.getElementById('mg-options');
     box.classList.remove('hidden');
-    box.innerHTML = options.map(opt => `<button type="button" class="btn btn-option">${opt}</button>`).join('');
+    box.innerHTML = options.map(opt =>
+      `<button type="button" class="btn btn-option">${opt}</button>`
+    ).join('');
+
     box.querySelectorAll('.btn-option').forEach(btn => {
-      btn.addEventListener('click', () => attemptAnswer(btn.textContent, drink, btn));
+      btn.addEventListener('click', () => attemptDrinkAnswer(btn.textContent, drink, molecules, btn));
     });
+
     document.getElementById('hint1-btn').disabled = true;
 
     const hint2 = document.getElementById('hint2-btn');
@@ -173,24 +162,32 @@ function renderMoleculeGuess(round, stage) {
 
   document.getElementById('hint2-btn').addEventListener('click', () => {
     if (Game.roundLocked || document.getElementById('hint2-btn').disabled) return;
-    clearFeedback();
+    clearFeedback('mg-feedback');
     registerHintUsed();
     document.querySelectorAll('.mol-name').forEach(el => el.classList.remove('hidden'));
     document.getElementById('hint2-btn').disabled = true;
   });
+}
 
+function initMoleculeGuessCards(stage) {
   stage.querySelectorAll('.mol-card').forEach(card => {
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => {
       const nameEl = card.querySelector('.mol-name');
       const nameRevealed = nameEl && !nameEl.classList.contains('hidden');
-      openMoleculeLightbox(card.dataset.structure, card.dataset.formula, nameRevealed ? card.dataset.molname : null);
+      openLightbox({
+        src: card.dataset.structure,
+        formula: card.dataset.formula,
+        name: nameRevealed ? card.dataset.molname : null
+      });
     });
   });
+}
 
+function initMoleculeGuessForm(drink, molecules, stage) {
   const mgInput = document.getElementById('mg-input');
-  mgInput.addEventListener('input', clearFeedback);
-  mgInput.addEventListener('focus', clearFeedback);
+  mgInput.addEventListener('input', () => clearFeedback('mg-feedback'));
+  mgInput.addEventListener('focus', () => clearFeedback('mg-feedback'));
 
   let lastSubmittedText = null;
 
@@ -200,48 +197,49 @@ function renderMoleculeGuess(round, stage) {
     const current = mgInput.value.trim();
     if (!current || current.toLowerCase() === lastSubmittedText) return;
     lastSubmittedText = current.toLowerCase();
-    attemptAnswer(mgInput.value, drink);
+    attemptDrinkAnswer(mgInput.value, drink, molecules);
   });
+}
 
-  let lastWrongText = null;
+function attemptDrinkAnswer(text, drink, molecules, btnEl) {
+  if (Game.roundLocked) return;
+  const feedback = document.getElementById('mg-feedback');
 
-  function attemptAnswer(text, drink, btnEl) {
-    if (Game.roundLocked) return;
+  if (isCorrectDrinkAnswer(drink, text)) {
+    completeRound();
+    feedback.className = 'feedback correct';
+    feedback.textContent = `Corretto! Era ${drink.name}.`;
+    document.getElementById('mg-form').querySelectorAll('input,button').forEach(el => el.disabled = true);
+    document.querySelectorAll('#mg-options .btn-option').forEach(el => el.disabled = true);
+    document.querySelectorAll('.mol-name').forEach(el => el.classList.remove('hidden'));
+    showSolutionPopup(drink, molecules);
+  } else {
     const normalized = text.trim().toLowerCase();
-    if (isCorrectDrinkAnswer(drink, text)) {
-      completeRound();
-      feedback.className = 'feedback correct';
-      feedback.textContent = `Corretto! Era ${drink.name}.`;
-      document.getElementById('mg-form').querySelectorAll('input,button').forEach(el => el.disabled = true);
-      document.querySelectorAll('#mg-options .btn-option').forEach(el => el.disabled = true);
-      document.querySelectorAll('.mol-name').forEach(el => el.classList.remove('hidden'));
-      showSolutionPopup(drink, molecules);
-    } else {
-      if (normalized !== lastWrongText) {
-        registerWrongAttempt();
-        lastWrongText = normalized;
-      }
-      feedback.className = 'feedback wrong';
-      feedback.textContent = randomWrongDrinkMessage();
-      if (btnEl) {
-        btnEl.classList.add('wrong');
-        btnEl.disabled = true;
-      }
+    if (normalized !== (attemptDrinkAnswer._lastWrong || '')) {
+      registerWrongAttempt();
+      attemptDrinkAnswer._lastWrong = normalized;
+    }
+    feedback.className = 'feedback wrong';
+    feedback.textContent = randomWrongDrinkMessage();
+    if (btnEl) {
+      btnEl.classList.add('wrong');
+      btnEl.disabled = true;
     }
   }
 }
 
 
-/* =========================================================================
-   POP-UP SOLUZIONE (mostrato alla risposta esatta di una manche
-   "molecule-guess"), in stile "carta soluzione".
-   ========================================================================= */
+/* ---------- feedback helper ---------- */
 
-function starsHTML(n) {
-  const filled = '★'.repeat(n);
-  const empty = '☆'.repeat(Math.max(5 - n, 0));
-  return `<span class="stars-filled">${filled}</span><span class="stars-empty">${empty}</span>`;
+function clearFeedback(id) {
+  const el = document.getElementById(id);
+  if (el) { el.textContent = ''; el.className = 'feedback'; }
 }
+
+
+/* =========================================================================
+   POP-UP SOLUZIONE (mostrato alla risposta esatta di "molecule-guess")
+   ========================================================================= */
 
 function showSolutionPopup(drink, molecules) {
   closeSolutionPopup();
@@ -252,7 +250,7 @@ function showSolutionPopup(drink, molecules) {
       <div class="solution-mol-text">
         <div class="solution-formula">${mol.formula}</div>
         <div class="solution-name">${mol.name}</div>
-        <div class="solution-desc">${(drink.moleculeNotes && drink.moleculeNotes[mol.id]) || ''}</div>
+        <div class="solution-desc">${(drink.moleculeNotes && drink.moleculeNotes[mol.key]) || ''}</div>
       </div>
     </div>
   `).join('');
@@ -294,7 +292,7 @@ function closeSolutionPopup() {
 
 
 /* =========================================================================
-   TIPO 2 — MULTIPLE CHOICE (domanda generica a risposta multipla)
+   TIPO 2 — MULTIPLE CHOICE (domanda a risposta multipla)
    ========================================================================= */
 
 function renderMultipleChoice(round, stage) {
@@ -311,29 +309,34 @@ function renderMultipleChoice(round, stage) {
   `;
 
   stage.querySelectorAll('.btn-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (Game.roundLocked) return;
-      const idx = Number(btn.dataset.index);
-      const feedback = document.getElementById('mc-feedback');
-      stage.querySelectorAll('.btn-option').forEach(b => {
-        b.disabled = true;
-        if (Number(b.dataset.index) === round.correctIndex) b.classList.add('correct');
-      });
-      if (idx === round.correctIndex) {
-        completeRound(100);
-        feedback.className = 'feedback correct';
-        feedback.textContent = 'Corretto!';
-      } else {
-        btn.classList.add('wrong');
-        completeRound(0);
-        feedback.className = 'feedback wrong';
-        feedback.textContent = randomWrongQuizMessage();
-      }
-      revealNext();
-    });
+    btn.addEventListener('click', () => handleMultipleChoiceAnswer(btn, round, stage));
   });
 
   wireNextButton();
+}
+
+function handleMultipleChoiceAnswer(btn, round, stage) {
+  if (Game.roundLocked) return;
+  const idx = Number(btn.dataset.index);
+  const feedback = document.getElementById('mc-feedback');
+
+  stage.querySelectorAll('.btn-option').forEach(b => {
+    b.disabled = true;
+    if (Number(b.dataset.index) === round.correctIndex) b.classList.add('correct');
+  });
+
+  if (idx === round.correctIndex) {
+    completeRound(100);
+    feedback.className = 'feedback correct';
+    feedback.textContent = 'Corretto!';
+  } else {
+    btn.classList.add('wrong');
+    completeRound(0);
+    feedback.className = 'feedback wrong';
+    feedback.textContent = randomWrongQuizMessage();
+  }
+
+  revealNext();
 }
 
 
@@ -347,7 +350,20 @@ function renderMatching(round, stage) {
   shuffleArray(names);
   shuffleArray(images);
 
-  stage.innerHTML = `
+  stage.innerHTML = buildMatchingHTML(round, names, images);
+
+  const state = { selectedName: null, matchedCount: 0 };
+  const total = round.pairs.length;
+
+  initMatchingCardDismiss(stage);
+  initMatchingNames(stage, state, total);
+  initMatchingImages(stage, state, total);
+
+  wireNextButton();
+}
+
+function buildMatchingHTML(round, names, images) {
+  return `
     <div class="round-card question-card">
       <div class="eyebrow">${document.getElementById('round-counter').textContent}</div>
       <h2 class="round-heading">${round.instructions || 'Associa ogni nome alla sua immagine'}</h2>
@@ -368,48 +384,48 @@ function renderMatching(round, stage) {
       ${nextButtonHTML()}
     </div>
   `;
+}
 
-  let selectedName = null;
-  let matchedCount = 0;
-  const total = round.pairs.length;
-
+function initMatchingCardDismiss(stage) {
   const card = stage.querySelector('.round-card');
-  card.addEventListener('click', () => {
-    const fb = document.getElementById('match-feedback');
-    if (fb && fb.textContent) { fb.textContent = ''; fb.className = 'feedback'; }
-  });
+  card.addEventListener('click', () => clearFeedback('match-feedback'));
+}
 
-  function tryMatch(nameBtn, imageBtn) {
-    const feedback = document.getElementById('match-feedback');
-    if (nameBtn.dataset.pair === imageBtn.dataset.pair) {
-      nameBtn.classList.add('matched');
-      nameBtn.classList.remove('selected');
-      nameBtn.disabled = true;
-      nameBtn.draggable = false;
-      imageBtn.classList.add('matched');
-      selectedName = null;
-      matchedCount++;
-      feedback.className = 'feedback correct';
-      feedback.textContent = 'Coppia corretta!';
-      if (matchedCount === total) {
-        completeRound();
-        feedback.textContent = 'Hai completato tutte le associazioni! 🎉';
-        revealNext();
-      }
-    } else {
-      registerWrongAttempt();
-      imageBtn.classList.add('wrong-flash');
-      nameBtn.classList.add('wrong-flash');
-      feedback.className = 'feedback wrong';
-      feedback.textContent = 'Associazione sbagliata, riprova.';
-      setTimeout(() => {
-        imageBtn.classList.remove('wrong-flash');
-        nameBtn.classList.remove('wrong-flash', 'selected');
-        if (selectedName === nameBtn) selectedName = null;
-      }, 500);
+function tryMatch(nameBtn, imageBtn, state, total) {
+  const feedback = document.getElementById('match-feedback');
+
+  if (nameBtn.dataset.pair === imageBtn.dataset.pair) {
+    nameBtn.classList.add('matched');
+    nameBtn.classList.remove('selected');
+    nameBtn.disabled = true;
+    nameBtn.draggable = false;
+    imageBtn.classList.add('matched');
+    state.selectedName = null;
+    state.matchedCount++;
+
+    feedback.className = 'feedback correct';
+    feedback.textContent = 'Coppia corretta!';
+
+    if (state.matchedCount === total) {
+      completeRound();
+      feedback.textContent = 'Hai completato tutte le associazioni!';
+      revealNext();
     }
+  } else {
+    registerWrongAttempt();
+    imageBtn.classList.add('wrong-flash');
+    nameBtn.classList.add('wrong-flash');
+    feedback.className = 'feedback wrong';
+    feedback.textContent = 'Associazione sbagliata, riprova.';
+    setTimeout(() => {
+      imageBtn.classList.remove('wrong-flash');
+      nameBtn.classList.remove('wrong-flash', 'selected');
+      if (state.selectedName === nameBtn) state.selectedName = null;
+    }, 500);
   }
+}
 
+function initMatchingNames(stage, state, total) {
   let touchDragging = null;
   let touchMoved = false;
 
@@ -420,7 +436,7 @@ function renderMatching(round, stage) {
       if (btn.classList.contains('matched')) return;
       stage.querySelectorAll('.btn-name').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      selectedName = btn;
+      state.selectedName = btn;
     });
 
     btn.addEventListener('dragstart', (e) => {
@@ -430,20 +446,18 @@ function renderMatching(round, stage) {
       btn.classList.add('dragging');
       stage.querySelectorAll('.btn-name').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      selectedName = btn;
+      state.selectedName = btn;
     });
 
-    btn.addEventListener('dragend', () => {
-      btn.classList.remove('dragging');
-    });
+    btn.addEventListener('dragend', () => btn.classList.remove('dragging'));
 
-    btn.addEventListener('touchstart', (e) => {
+    btn.addEventListener('touchstart', () => {
       if (btn.classList.contains('matched')) return;
       touchDragging = btn;
       touchMoved = false;
       stage.querySelectorAll('.btn-name').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected', 'dragging');
-      selectedName = btn;
+      state.selectedName = btn;
     }, { passive: true });
 
     btn.addEventListener('touchmove', (e) => {
@@ -461,36 +475,38 @@ function renderMatching(round, stage) {
       }
     }, { passive: false });
 
-    btn.addEventListener('touchend', (e) => {
+    btn.addEventListener('touchend', () => {
       if (!touchDragging || touchDragging !== btn) return;
       btn.classList.remove('dragging');
       const overBtn = stage.querySelector('.btn-image.drag-over');
       stage.querySelectorAll('.btn-image').forEach(b => b.classList.remove('drag-over'));
       if (touchMoved && overBtn) {
-        tryMatch(btn, overBtn);
+        tryMatch(btn, overBtn, state, total);
       }
       touchDragging = null;
       touchMoved = false;
     });
   });
+}
 
+function initMatchingImages(stage, state, total) {
   stage.querySelectorAll('.magnify-btn').forEach(mBtn => {
     mBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      openImageLightbox(mBtn.dataset.image);
+      openLightbox({ src: mBtn.dataset.image });
     });
   });
 
   stage.querySelectorAll('.btn-image').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.classList.contains('matched')) return;
-      const feedback = document.getElementById('match-feedback');
-      if (!selectedName) {
+      if (!state.selectedName) {
+        const feedback = document.getElementById('match-feedback');
         feedback.className = 'feedback';
         feedback.textContent = 'Seleziona prima un nome a sinistra.';
         return;
       }
-      tryMatch(selectedName, btn);
+      tryMatch(state.selectedName, btn, state, total);
     });
 
     btn.addEventListener('dragover', (e) => {
@@ -500,76 +516,20 @@ function renderMatching(round, stage) {
       btn.classList.add('drag-over');
     });
 
-    btn.addEventListener('dragleave', () => {
-      btn.classList.remove('drag-over');
-    });
+    btn.addEventListener('dragleave', () => btn.classList.remove('drag-over'));
 
     btn.addEventListener('drop', (e) => {
       e.preventDefault();
       btn.classList.remove('drag-over');
-      if (btn.classList.contains('matched') || !selectedName) return;
-      tryMatch(selectedName, btn);
+      if (btn.classList.contains('matched') || !state.selectedName) return;
+      tryMatch(state.selectedName, btn, state, total);
     });
   });
-
-  wireNextButton();
-}
-
-/* ---------- lightbox per l'immagine ingrandita (manche "associazione") ---------- */
-
-function openImageLightbox(src) {
-  closeImageLightbox();
-  const overlay = document.createElement('div');
-  overlay.id = 'image-lightbox';
-  overlay.className = 'image-lightbox';
-  overlay.innerHTML = `
-    <div class="image-lightbox-inner">
-      <button class="image-lightbox-close" aria-label="Chiudi">×</button>
-      <img src="${src}" alt="">
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  overlay.querySelector('.image-lightbox-close').addEventListener('click', closeImageLightbox);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeImageLightbox();
-  });
-  document.addEventListener('keydown', escCloseLightbox);
-}
-
-function escCloseLightbox(e) {
-  if (e.key === 'Escape') closeImageLightbox();
-}
-
-function closeImageLightbox() {
-  const el = document.getElementById('image-lightbox');
-  if (el) el.remove();
-  document.removeEventListener('keydown', escCloseLightbox);
-}
-
-function openMoleculeLightbox(src, formula, name) {
-  closeImageLightbox();
-  const overlay = document.createElement('div');
-  overlay.id = 'image-lightbox';
-  overlay.className = 'image-lightbox';
-  overlay.innerHTML = `
-    <div class="image-lightbox-inner mol-lightbox-inner">
-      <button class="image-lightbox-close" aria-label="Chiudi">&times;</button>
-      <h3 class="mol-lightbox-title">${formula}</h3>
-      <img src="${src}" alt="${name}">
-      ${name ? `<p class="mol-lightbox-name">${name}</p>` : ''}
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  overlay.querySelector('.image-lightbox-close').addEventListener('click', closeImageLightbox);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeImageLightbox();
-  });
-  document.addEventListener('keydown', escCloseLightbox);
 }
 
 
 /* =========================================================================
-   TIPO 4 — IMAGE ZOOM (indovina dall'immagine super-zoomata, stile "splash")
+   TIPO 4 — IMAGE ZOOM ("Splash", indovina dall'immagine zoomata)
    ========================================================================= */
 
 function renderImageZoom(round, stage) {
@@ -603,11 +563,9 @@ function renderImageZoom(round, stage) {
   `;
 
   const img = document.getElementById('zoom-image');
-  const feedback = document.getElementById('zoom-feedback');
   const input = document.getElementById('zoom-input');
-  const clearFeedback = () => { feedback.textContent = ''; feedback.className = 'feedback'; };
-  input.addEventListener('input', clearFeedback);
-  input.addEventListener('focus', clearFeedback);
+  input.addEventListener('input', () => clearFeedback('zoom-feedback'));
+  input.addEventListener('focus', () => clearFeedback('zoom-feedback'));
 
   let lastSubmittedZoom = null;
 
@@ -617,6 +575,8 @@ function renderImageZoom(round, stage) {
     const current = input.value.trim();
     if (!current || current.toLowerCase() === lastSubmittedZoom) return;
     lastSubmittedZoom = current.toLowerCase();
+
+    const feedback = document.getElementById('zoom-feedback');
 
     if (isCorrectSimpleAnswer(round, input.value)) {
       completeRound();
