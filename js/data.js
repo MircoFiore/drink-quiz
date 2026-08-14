@@ -186,7 +186,7 @@ const DRINKS = [
       limonene: 'Limonene, l\'aroma agrumato della scorza di limone.',
       co2: 'Anidride carbonica: dà l\'effervescenza al drink.'
     },
-    quizOptions: ['Vodka Lemon', 'Mojito', 'Americano', 'Spritz'],
+    quizOptions: ['Vodka Lemon', 'Hugo', 'Mimosa', 'Spritz'],
     tip: 'L\'unione di acqua, alcol e acidità crea un cocktail semplice, fresco e dissetante.',
     image: 'assets/drinks/vodka_lemon.webp',
     difficulty: 1
@@ -201,7 +201,7 @@ const DRINKS = [
       co2: 'Anidride carbonica: rende frizzante la tonica.',
       limonene: 'Limonene: aroma della scorza di limone o lime.'
     },
-    quizOptions: ['Gin Tonic', 'Vodka Lemon', 'Moscow Mule', 'Negroni'],
+    quizOptions: ['Gin Tonic', 'Daiquiri', 'Moscow Mule', 'Caipirinha'],
     tip: 'Il chinino è praticamente la firma chimica del Gin Tonic.',
     image: 'assets/drinks/gin_tonic.webp',
     difficulty: 1
@@ -216,7 +216,7 @@ const DRINKS = [
       citric_acid: 'Acido citrico, l\'acidità del lime.',
       sucrose: 'Saccarosio: la dolcezza dello zucchero di canna.'
     },
-    quizOptions: ['Mojito', 'Vodka Lemon', 'Caipirinha', 'Daiquiri'],
+    quizOptions: ['Mojito', 'Vodka Lemon', 'Caipirinha', 'Verdone'],
     tip: 'Menta, lime e zucchero di canna si bilanciano in un cocktail fresco e dissetante.',
     image: 'assets/drinks/mojito.webp',
     difficulty: 2
@@ -277,7 +277,7 @@ const DRINKS = [
       sucrose: 'Saccarosio: bilancia l\'acidità.',
       ovalbumin: 'Ovalbumina: crea la tipica schiuma del Whiskey Sour.'
     },
-    quizOptions: ['Whiskey Sour', 'Moscow Mule', 'Negroni', 'Cuba Libre'],
+    quizOptions: ['Whiskey Sour', 'Moscow Mule', 'Rosetta', 'Cuba Libre'],
     tip: 'La presenza dell\'albume rende questo cocktail unico.',
     image: 'assets/drinks/whiskey_sour.webp',
     difficulty: 3
@@ -337,7 +337,7 @@ const DRINKS = [
       linalool: 'Linalolo: nota floreale tipica del gin e del vermouth.',
       caryophyllene: 'β-Cariofillene: composto aromatico presente in molte spezie e botaniche del bitter.'
     },
-    quizOptions: ['Negroni', 'Americano', 'Gin Tonic', 'Spritz'],
+    quizOptions: ['Negroni', 'Americano', 'Long Island', 'Spritz'],
     tip: 'Nessuna molecola è esclusiva del Negroni, ma l\'insieme delle botaniche lo rende riconoscibile.',
     image: 'assets/drinks/negroni.webp',
     difficulty: 5
